@@ -619,11 +619,11 @@ $("#fiche").addEventListener("click",ev=>{const b=ev.target.closest("[data-son]"
  if(audio&&!audio.paused){audio.pause();document.querySelectorAll(".pola.son").forEach(x=>x.classList.remove("joue"));return}
  audio=new Audio(b.dataset.son);audio.onended=()=>c.classList.remove("joue");audio.play();c.classList.add("joue")});
 function majNav(){const p=E[cur-1],n=E[cur+1],bp=document.getElementById("anPrec"),bn=document.getElementById("anSuiv");
- bp.hidden=!p;bn.hidden=false;if(p)bp.innerHTML=`← <b>${p.an}</b> ${p.ville}`;bn.innerHTML=n?`${n.ville} <b>${n.an}</b> →`:`<b>R comme Réseau</b> →`}
+ bp.hidden=!p;bn.hidden=false;if(p)bp.innerHTML=`← <b>${p.an}</b> ${p.ville}`;bn.innerHTML=n?`${n.ville} <b>${n.an}</b> →`:`<b>Accueil</b> →`}
 document.getElementById("anPrec").addEventListener("click",()=>{if(cur>0){cur--;rendre()}});
 document.getElementById("anSuiv").addEventListener("click",()=>{if(cur<E.length-1){cur++;rendre()}
- /* après 2026 : partie suivante de la présentation, « R comme Réseau » */
- else if(window.parent!==window)window.parent.postMessage({rasf:"suivant"},"*");else location.href="03-membres.html"});
+ /* après 2026 : retour au sommaire de la présentation (Accueil) */
+ else if(window.parent!==window)window.parent.postMessage({rasf:"sommaire"},"*");else location.href="presentation.html#sommaire"});
 /* Fenêtre des années : VISIBLES cases à la fois, chevrons pour faire défiler, l'année affichée reste toujours visible */
 const VISIBLES=3;let debut=0;
 function caler(force){const f=$("#fenetre"),w=f.clientWidth/VISIBLES;
@@ -636,7 +636,7 @@ $("#chevG").addEventListener("click",()=>{debut-=VISIBLES;caler(true)});
 $("#chevD").addEventListener("click",()=>{debut+=VISIBLES;caler(true)});
 addEventListener("resize",()=>caler(true));
 $("#annees").addEventListener("click",ev=>{const b=ev.target.closest(".an");if(b){cur=+b.dataset.i;rendre()}});
-addEventListener("keydown",ev=>{if(ev.key==="ArrowRight"&&cur<E.length-1){cur++;rendre()}if(ev.key==="ArrowLeft"&&cur>0){cur--;rendre()}});
+addEventListener("keydown",ev=>{if(ev.key==="ArrowRight"){if(cur<E.length-1){cur++;rendre()}else if(window.parent!==window)window.parent.postMessage({rasf:"sommaire"},"*")}if(ev.key==="ArrowLeft"&&cur>0){cur--;rendre()}});
 function ajuster(){const s=Math.min(innerWidth/1600,innerHeight/900);$("#stage").style.transform=`translate(-50%,-50%) scale(${s})`}
 addEventListener("resize",ajuster);ajuster();rendre();
 /* Avec le code : on déchiffre les dossiers de photos puis on réaffiche l'année en cours */

@@ -353,7 +353,7 @@ html.apercu .frise-ans .piste{animation:none!important}
     </section>
 
     <section class="ecran" id="ecran-tl" data-rubrique="1 · Les origines, 2013 – 2016">
-      <button class="tl-suite" data-clic data-aller="partie-02">Les Journées RASF&nbsp;→</button>
+      <button class="tl-suite" data-clic data-aller="ecran-menu">Accueil&nbsp;→</button>
       <div class="sur-titre" data-anim="fondu">Juin 2013 → octobre 2016</div>
       <h2 data-anim="haut" style="margin-bottom:0">De la liste nationale à la concrétisation de RASF</h2>
       <div class="frise frise-tl">
@@ -432,8 +432,10 @@ html.apercu .frise-ans .piste{animation:none!important}
   function entrer(){poser(-1);if(document.documentElement.classList.contains("apercu")){poser(MAX);return}requestAnimationFrame(()=>requestAnimationFrame(()=>poser(0)))}
   document.addEventListener("ecran",e=>{if(e.detail.el===sec)entrer();else poser(-1)});
   if(ici())entrer();
-  addEventListener("keydown",ev=>{if(!ici()||etape>=MAX||document.querySelector(".pdf-voile.ouvert"))return;if(["ArrowRight"," ","PageDown"].includes(ev.key)){ev.preventDefault();ev.stopImmediatePropagation();poser(etape+1)}},true);
-  document.addEventListener("click",ev=>{if(!ici()||etape>=MAX)return;if(ev.target.closest("a,button,input,select,.pied,[data-clic]"))return;const st=document.getElementById("stage").getBoundingClientRect();if(ev.clientX>st.left+st.width/2){ev.stopPropagation();poser(etape+1)}},true);
+  /* Fin de la séquence 1 : retour au sommaire (Accueil) */
+  const auMenu=()=>{const i=[...document.querySelectorAll(".ecran")].indexOf(document.getElementById("ecran-menu"));if(i>=0)RASF.montrer(i)};
+  addEventListener("keydown",ev=>{if(!ici()||document.querySelector(".pdf-voile.ouvert"))return;if(["ArrowRight"," ","PageDown"].includes(ev.key)){ev.preventDefault();ev.stopImmediatePropagation();if(etape>=MAX)auMenu();else poser(etape+1)}},true);
+  document.addEventListener("click",ev=>{if(!ici())return;if(ev.target.closest("a,button,input,select,.pied,[data-clic]"))return;const st=document.getElementById("stage").getBoundingClientRect();if(ev.clientX>st.left+st.width/2){ev.stopPropagation();if(etape>=MAX)auMenu();else poser(etape+1)}},true);
 })();
 </script>
 <div class="pdf-voile" id="pdf-voile"><div class="pdf-boite"><button class="pdf-fermer" type="button" aria-label="Fermer">×</button><iframe title="Document"></iframe></div></div>
@@ -462,7 +464,7 @@ document.addEventListener("click",ev=>{const t=ev.target.closest("[data-aller]")
 <script>
 /* Parties intégrées : chaque page tourne dans son cadre avec ses propres animations.
    Les pages parlent à la présentation par postMessage (integration.js), ce qui marche aussi en file://.
-   Au dernier écran d'une partie, → passe à la suivante ; au premier, ← revient à la précédente ; Échap ou « ← Sommaire » ramène au sommaire. */
+   Au dernier écran d'une partie, → revient au sommaire (Accueil) ; au premier, ← revient à la précédente ; Échap ou « ← Sommaire » ramène au sommaire. */
 (function(){
   const ecrans=()=>[...document.querySelectorAll("#stage .contenu > .ecran")];
   const aller=id=>{const i=ecrans().indexOf(document.getElementById(id));if(i>=0){RASF.montrer(i);window.focus()}};
@@ -470,7 +472,7 @@ document.addEventListener("click",ev=>{const t=ev.target.closest("[data-aller]")
   addEventListener("message",ev=>{const m=(ev.data||{}).rasf;if(!m)return;
     if(m==="sommaire")aller("ecran-menu");
     if(m==="accueil")aller("ecran-couv");
-    if(m==="suivant"){if(RASF.courant<ecrans().length-1){versLaFin=false;RASF.montrer(RASF.courant+1)}else aller("ecran-menu")}
+    if(m==="suivant")aller("ecran-menu");
     if(m==="precedent"&&RASF.courant>0){versLaFin=true;RASF.montrer(RASF.courant-1)}
     if(m==="ancre"&&ev.data.v){try{history.replaceState(null,"","#"+ev.data.v)}catch(e){}}});
   /* Une adresse par écran : #accueil, #sommaire, #origines, #journees-2019, #reseau… */
@@ -489,7 +491,7 @@ document.addEventListener("click",ev=>{const t=ev.target.closest("[data-aller]")
   addEventListener("keydown",ev=>{if(["ArrowLeft","PageUp"].includes(ev.key))versLaFin=true},true);
   function entrer(sec){
     const f=sec.querySelector("iframe");if(!f)return;
-    const placer=()=>{f.contentWindow.postMessage({rasf:"nom",nom:sec.dataset.rubrique||""},"*");{const E=ecrans(),i=E.indexOf(sec),lib=x=>x?((x.dataset.rubrique||"").replace(/^\d+ · /,"")):"";f.contentWindow.postMessage({rasf:"voisins",prec:lib(E[i-1])||"Accueil",suiv:lib(E[i+1])||"Accueil"},"*")}f.contentWindow.postMessage({rasf:versLaFin?"fin":"debut"},"*");versLaFin=false;f.focus()};
+    const placer=()=>{f.contentWindow.postMessage({rasf:"nom",nom:sec.dataset.rubrique||""},"*");{const E=ecrans(),i=E.indexOf(sec),lib=x=>x?((x.dataset.rubrique||"").replace(/^\d+ · /,"")):"";f.contentWindow.postMessage({rasf:"voisins",prec:lib(E[i-1])||"Accueil",suiv:"Accueil"},"*")}f.contentWindow.postMessage({rasf:versLaFin?"fin":"debut"},"*");versLaFin=false;f.focus()};
     if(!f.getAttribute("src")){f.addEventListener("load",placer,{once:true});f.src=f.dataset.src+(sec.id==="partie-02"?"?t=":"?ecran=0&t=")+Date.now()+(sec.id==="partie-02"&&anneeDemandee?"#"+anneeDemandee:"")}else{if(sec.id==="partie-02"&&anneeDemandee)f.contentWindow.postMessage({rasf:"annee",v:anneeDemandee},"*");placer()}anneeDemandee="";
   }
   document.addEventListener("ecran",e=>{if(e.detail.el.classList.contains("partie"))entrer(e.detail.el);else{window.focus();versLaFin=false}});
