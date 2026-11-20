@@ -503,7 +503,7 @@ document.addEventListener("click",ev=>{const t=ev.target.closest("[data-aller]")
   function maj(){const a=!!(window.Coffre&&Coffre.code());f.classList.toggle("ok",a);etat.textContent=a?"🔓 Photos visibles":"🔒 Photos";etat.title=a?"Cliquer pour oublier le code":""}
   f.addEventListener("submit",async e=>{e.preventDefault();e.stopPropagation();etat.textContent="Vérification…";
     if(await Coffre.essayer(inp.value.trim())){inp.value="";maj();document.querySelectorAll(".partie iframe[src]").forEach(fr=>{fr.src=fr.src})}
-    else{etat.textContent="Code incorrect";inp.select()}});
+    else{etat.textContent=(window.crypto&&crypto.subtle)?"Code incorrect":"Photos : ouvrir en https://";inp.select()}});
   etat.addEventListener("click",e=>{if(!f.classList.contains("ok"))return;e.stopPropagation();Coffre.oublier();maj();document.querySelectorAll(".partie iframe[src]").forEach(fr=>{fr.src=fr.src})});
   f.addEventListener("click",e=>e.stopPropagation());f.addEventListener("keydown",e=>e.stopPropagation());
   maj();
