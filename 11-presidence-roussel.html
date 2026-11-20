@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RASF 10 ans · La présidence de Christophe Roussel</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="commun.css">
+<style>
+/* écran 0 */
+.badge{display:inline-block;border:2px solid var(--or);color:var(--ambre);font-weight:700;font-size:22px;padding:8px 22px;border-radius:30px;margin-top:30px}
+/* écran 1 : frise */
+.frise{position:relative;height:610px}
+.frise .axe{position:absolute;left:20px;right:20px;top:300px;height:4px;background:var(--trait);border-radius:2px}
+.frise .axe i{position:absolute;inset:0;background:var(--or);transform-origin:left;transform:scaleX(0);transition:transform 3s cubic-bezier(.3,.6,.3,1) .2s;border-radius:2px}
+.vu .frise .axe i{transform:scaleX(1)}
+.jalon{position:absolute;top:0;height:610px;width:134px;margin-left:-67px}
+.jalon .pt{position:absolute;left:50%;top:302px;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:var(--papier);border:4px solid var(--or)}
+.jalon .an{position:absolute;left:-20px;right:-20px;text-align:center;font:700 18px var(--texte);color:var(--nuit)}
+.jalon .txt{position:absolute;left:50%;width:220px;margin-left:-110px;text-align:center;font-size:19px;line-height:1.3;color:var(--encre)}
+.jalon.h .an{top:326px}.jalon.h .txt{bottom:340px}
+.jalon.b .an{top:252px}.jalon.b .txt{top:356px}
+.jalon.h .txt::after,.jalon.b .txt::before{content:"";display:block;width:2px;height:22px;background:var(--trait);margin:6px auto}
+.jalon.fin .pt{background:var(--or);width:30px;height:30px;margin:-15px 0 0 -15px}
+.jalon.fin .txt{font-weight:700;color:var(--nuit)}
+/* écran 2 : chantiers */
+.grille{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.grille .carte{height:262px;padding:24px 28px;display:flex;flex-direction:column;border-top:5px solid var(--or)}
+.grille .carte h3{font:700 27px var(--titre);color:var(--nuit);margin-bottom:8px}
+.grille .carte .quand{font:700 14px var(--texte);letter-spacing:2px;text-transform:uppercase;color:var(--ambre)}
+.grille .carte p{font-size:20px;line-height:1.35;color:var(--gris);margin-top:auto}
+.grille .carte .k{font:700 44px var(--titre);color:var(--or);line-height:1.1;margin-top:6px}
+.grille .carte .k small{font:600 19px var(--texte);color:var(--nuit);margin-left:6px}
+/* écran 3 : état */
+.etat{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.col{border-radius:10px;padding:26px 30px;height:520px}
+.col h3{font:700 32px var(--titre);margin-bottom:18px;display:flex;align-items:center;gap:14px}
+.col h3 i{width:18px;height:18px;border-radius:50%;display:inline-block}
+.col ul{list-style:none}
+.col li{font-size:22px;line-height:1.35;padding:12px 0;border-top:1px solid rgba(0,0,0,.08)}
+.col li small{display:block;font-size:16px;color:var(--gris)}
+.col.fait{background:#fff;border:1px solid var(--trait)}.col.fait h3{color:var(--vert)}.col.fait h3 i{background:var(--vert)}
+.col.cours{background:#fff;border:1px solid var(--trait)}.col.cours h3{color:var(--ambre)}.col.cours h3 i{background:var(--ambre)}
+.col.attendu{background:var(--nuit);color:#fff}.col.attendu h3{color:var(--or)}.col.attendu h3 i{background:var(--or)}
+.col.attendu li{border-color:rgba(255,255,255,.15)}.col.attendu li small{color:#c9d2ea}
+/* écran 4 : chiffres */
+.chiffres{display:grid;grid-template-columns:repeat(3,1fr);gap:40px 60px;margin-top:40px;width:1300px}
+.chiffres .legende-chiffre{line-height:1.35}
+.k,h1,h2,h3,.chiffre{font-variant-numeric:lining-nums!important}
+.final{overflow:hidden;background:radial-gradient(120% 140% at 25% 50%,#1a3470 0%,#0B1F4D 45%,#050d24 100%)}
+.final .sur-titre{color:#F2B41F}.final h1.grand{color:#fff}
+.final-logo{width:170px;margin-bottom:26px}
+.final h1.grand{font-size:72px}
+.final-voeu{font:italic 400 30px var(--titre);color:#aab6d8;margin-top:22px}
+/* Page finale seule : ni en-tête, ni bas de page, juste un bouton Accueil */
+#stage:has(.final.actif){grid-template-rows:1fr}
+#stage:has(.final.actif) .entete,#stage:has(.final.actif) .pied{display:none}
+.final-accueil{margin-top:44px;font:600 18px var(--texte);letter-spacing:2px;text-transform:uppercase;color:#0B1F4D;background:#F2B41F;border-radius:24px;padding:12px 30px;text-decoration:none;transition:background .25s,transform .25s}
+.final-accueil:hover{background:#fff;transform:translateY(-2px)}
+</style>
+</head>
+<body data-page="11-presidence-roussel">
+<div id="stage">
+  <header class="entete">
+    <div class="logo">RASF<small>10 ANS</small></div>
+    <div class="rubrique"><b>La présidence de Christophe Roussel</b><span>Juin 2025 – novembre 2026</span></div>
+    <div class="num">11</div>
+  </header>
+  <main class="contenu">
+
+    <!-- 0. Titre -->
+    <section class="ecran centre">
+      <div class="sur-titre" data-anim="fondu">Depuis l'AG du 27 juin 2025</div>
+      <h1 class="grand" data-anim="haut" style="--d:.15s">Un nouveau président,<br><span class="or">des chantiers ouverts</span></h1>
+      <p class="chapo" data-anim="haut" style="--d:.4s;margin-top:24px">Christophe Roussel succède à Edith Amadei-Giuseppi. En dix-sept mois : l'inspection, France Chimie, un projet commun entre lycées, un livre et les Journées des 10 ans.</p>
+      <div class="badge" data-anim="zoom" style="--d:.7s">Christophe Roussel, président de RASF</div>
+    </section>
+
+    <!-- Mis de côté : frise « Dix-sept mois en onze dates » -->
+    <template id="de-cote-frise">
+    <!-- 1. Frise -->
+    <section class="ecran">
+      <div class="sur-titre" data-anim="fondu">Juin 2025 → novembre 2026</div>
+      <h2 data-anim="haut" style="margin-bottom:0">Dix-sept mois en onze dates</h2>
+      <div class="frise"><div class="axe"><i></i></div><div id="jalons"></div></div>
+    </section>
+    </template>
+
+    <!-- 2. Chantiers -->
+    <section class="ecran">
+      <div class="sur-titre" data-anim="fondu">Les grands chantiers</div>
+      <h2 data-anim="haut" style="margin-bottom:20px">Les nouveaux projets RASF</h2>
+      <div class="grille" data-cascade="haut" data-base=".3">
+        <div class="carte"><div class="quand">Depuis juillet 2025</div><h3>L'inspection</h3><p>Courrier de présentation, visio avec les deux IA-IPR pilotes le 12/09/2025, réponses sur les redoublants diffusées à tous</p></div>
+        <div class="carte"><div class="quand">Depuis novembre 2025</div><h3>France Chimie</h3><div class="k">1<small>délégué par région</small></div><p>Un réseau de correspondants pour les stages et l'alternance</p></div>
+        <div class="carte"><div class="quand">Lancé à Angers</div><h3>Le projet commun</h3><div class="k">20<small>lycées volontaires</small></div><p>Un sujet type CCF4 « triptyque » qui passe d'un lycée à l'autre</p></div>
+        <div class="carte"><div class="quand">Novembre 2025</div><h3>Le livre d'annales</h3><div class="k">16<small>sujets corrigés</small></div><p>Projet proposé aux éditions Ellipses, rédigé collégialement</p></div>
+        <div class="carte"><div class="quand">Juillet 2025</div><h3>La team IA</h3><p>Chloé, Julien, Nils et Marco : des ateliers pratiques pour les Journées 2026</p></div>
+        <div class="carte"><div class="quand">Novembre 2025</div><h3>Un bureau qui se réunit</h3><p>Bureau élargi réuni à Paris le 8/11/2025, listes de diffusion simplifiées, visios nationales</p></div>
+      </div>
+    </section>
+
+    <!-- 3. État -->
+    <!-- Mis de côté : « Fait, en cours, attendu » -->
+    <template id="de-cote-fait">
+    <section class="ecran">
+      <div class="sur-titre" data-anim="fondu">Au 19 novembre 2026</div>
+      <h2 data-anim="haut" style="margin-bottom:20px">Fait, en cours, attendu</h2>
+      <div class="etat">
+        <div class="col fait" data-anim="haut" style="--d:.3s"><h3><i></i>Fait</h3><ul>
+          <li>Rencontre avec les IA-IPR<small>12 septembre 2025</small></li>
+          <li>Réseau France Chimie<small>liste des correspondants créée le 5/12/2025</small></li>
+          <li>Bureau élargi à Paris<small>8 novembre 2025</small></li>
+          <li>Sujets 2026 non utilisés en ligne<small>rasf.fr, juin 2026</small></li>
+        </ul></div>
+        <div class="col cours" data-anim="haut" style="--d:.6s"><h3><i></i>En cours</h3><ul>
+          <li>Le livre d'annales<small>8 lycées participants en janvier 2026</small></li>
+          <li>Bilan France Chimie<small>questionnaire aux correspondants, novembre 2026</small></li>
+          <li>État des lieux des sections<small>41 % des établissements ont répondu</small></li>
+        </ul></div>
+        <div class="col attendu" data-anim="haut" style="--d:.9s"><h3><i></i>Attendu aux Journées</h3><ul>
+          <li>Les résultats du projet commun<small>présentés par Edith Amadei-Giuseppi</small></li>
+          <li>Les ateliers IA<small>samedi 21 novembre</small></li>
+          <li>L'inclusion des techniciens chimistes<small>conférence de G. Bacquet (SciencExpert)</small></li>
+          <li>Les 10 ans de RASF<small>Paris, 20 et 21 novembre 2026</small></li>
+        </ul></div>
+      </div>
+    </section>
+    </template>
+
+    <!-- 4. Chiffres -->
+    <section class="ecran centre final" data-label="Belles Journées !">
+      <svg class="final-logo" data-anim="zoom" viewBox="0 0 200 230" aria-hidden="true">
+        <polygon points="100,6 194,60 194,170 100,224 6,170 6,60" fill="none" stroke="#F2B41F" stroke-width="5"/>
+        <text x="96" y="92" text-anchor="middle" font-family="Playfair Display" font-style="italic" font-weight="700" font-size="74" fill="#F2B41F">10</text>
+        <text x="150" y="118" text-anchor="middle" font-family="Playfair Display" font-weight="700" font-size="20" fill="#fff">ANS</text>
+        <g font-family="Source Sans 3" font-weight="700" font-size="17" text-anchor="middle" fill="#fff">
+          <polygon points="80,124 96,133 96,151 80,160 64,151 64,133" fill="none" stroke="#fff" stroke-width="2"/><text x="80" y="148">R</text>
+          <polygon points="64,152 80,161 80,179 64,188 48,179 48,161" fill="none" stroke="#fff" stroke-width="2"/><text x="64" y="176">A</text>
+          <polygon points="96,152 112,161 112,179 96,188 80,179 80,161" fill="none" stroke="#fff" stroke-width="2"/><text x="96" y="176">S</text>
+          <polygon points="128,152 144,161 144,179 128,188 112,179 112,161" fill="#F2B41F"/><text x="128" y="176">F</text>
+        </g>
+      </svg>
+      <div class="sur-titre" data-anim="fondu" style="--d:.3s">Paris · ACTED · 20 – 21 novembre 2026</div>
+      <h1 class="grand" data-anim="haut" style="--d:.45s">Bonnes Journées<br><span class="or">des 10 ans !</span></h1>
+      <p class="final-voeu" data-anim="fondu" style="--d:.9s">Joyeux 10 ans, et merci d'être là.</p>
+      <a class="final-accueil" href="presentation.html#sommaire" data-clic data-anim="fondu" style="--d:1.3s">Accueil</a>
+    </section>
+
+    <!-- Mis de côté : ancien dernier écran « Une présidence en six chiffres » -->
+    <template id="de-cote-chiffres">
+    <section class="ecran centre">
+      <div class="sur-titre" data-anim="fondu">En chiffres</div>
+      <h1 class="grand" data-anim="haut" style="--d:.1s;font-size:60px">Une présidence en six chiffres</h1>
+      <div class="chiffres">
+        <div data-anim="zoom" style="--d:.4s"><span class="chiffre" data-compte="20"></span><div class="legende-chiffre">lycées volontaires<br>pour le projet commun</div></div>
+        <div data-anim="zoom" style="--d:.55s"><span class="chiffre" data-compte="16"></span><div class="legende-chiffre">sujets prévus<br>dans le livre d'annales</div></div>
+        <div data-anim="zoom" style="--d:.7s"><span class="chiffre" data-compte="100"></span><div class="legende-chiffre">places dans la salle<br>des 10 ans</div></div>
+        <div data-anim="zoom" style="--d:.85s"><span class="chiffre" data-compte="41" data-suffixe=" %"></span><div class="legende-chiffre">des établissements ont répondu<br>à l'état des lieux</div></div>
+        <div data-anim="zoom" style="--d:1s"><span class="chiffre" data-compte="12"></span><div class="legende-chiffre">membres actifs sollicités<br>dès juillet 2025</div></div>
+        <div data-anim="zoom" style="--d:1.15s"><span class="chiffre" data-compte="70"></span><div class="legende-chiffre">adhérents au moment<br>de l'élection (juin 2025)</div></div>
+      </div>
+    </section>
+    </template>
+
+  </main>
+  <footer class="pied"><div class="source"></div><div class="points"></div><div class="aide">← → pour avancer</div></footer>
+</div>
+<script>
+// Frise (sources : recherches/05-actions-projets.md, §5.1)
+const JALONS=[
+  ["27/06/2025","Élu président à l'AG"],
+  ["01/07/2025","Propositions et idée du projet commun"],
+  ["12/09/2025","Visio avec les IA-IPR"],
+  ["08/11/2025","Bureau élargi réuni à Paris"],
+  ["12/11/2025","Premier contact avec France Chimie"],
+  ["21/11/2025","Angers : livre et projet commun"],
+  ["05/12/2025","Liste des correspondants France Chimie"],
+  ["04/01/2026","Vœux et projets 2026"],
+  ["06/2026","Sujets 2026 non utilisés en ligne"],
+  ["22/09/2026","Réponses de l'IPR sur les redoublants"],
+  ["20/11/2026","Les 10 ans à Paris"]
+];
+(function(){
+  const box=document.getElementById("jalons");if(box){const n=JALONS.length,L=20,W=1472-40;
+  box.innerHTML=JALONS.map((j,k)=>{
+    const x=L+W*(k+.5)/n, cl=(k%2?"b":"h")+(k===n-1?" fin":"");
+    return `<div class="jalon ${cl}" style="left:${x}px" data-anim="${k%2?"haut":"fondu"}"><div class="pt"></div><div class="an">${j[0]}</div><div class="txt">${j[1]}</div></div>`;
+  }).join("");
+  [...box.children].forEach((el,k)=>el.style.setProperty("--d",(.3+k*.27)+"s"))}
+})();
+</script>
+<script src="commun.js"></script>
+<script>
+/* Bouton Accueil de la page finale : dans la présentation, revient au sommaire ; seule, ouvre presentation.html */
+document.querySelector(".final-accueil").addEventListener("click",ev=>{if(window.parent!==window){ev.preventDefault();ev.stopPropagation();window.parent.postMessage({rasf:"sommaire"},"*")}},true);
+</script>
+<script src="integration.js"></script>
+</body></html>

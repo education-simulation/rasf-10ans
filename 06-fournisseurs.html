@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RASF 10 ans · Nos fournisseurs partenaires</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="commun.css">
+<style>
+/* écran 1 : chiffre fort */
+.trio{display:flex;gap:40px;margin-top:56px}
+.trio .carte{width:340px;text-align:center;padding:28px 24px}
+.trio .chiffre{font-size:72px}
+.geant{font-family:var(--titre);font-size:220px;line-height:1;color:var(--or);font-variant-numeric:lining-nums}
+.geant-legende{font:700 30px var(--titre);color:var(--nuit);margin-top:8px}
+
+/* écran 2 : mur des noms */
+.ecran.mur{background:#fff}
+.mur .merci-titre{font:700 120px/1 var(--titre);color:var(--or);text-align:center;margin:6px 0 10px}
+.mur .chapo{color:var(--gris);text-align:center;margin:0 auto 34px;font-size:21px;max-width:1300px}
+.noms{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:12px 30px;max-width:1440px;margin:0 auto}
+.noms span{font-family:var(--titre);line-height:1.15;white-space:nowrap}
+.noms .f1{font-size:24px;color:#7a849f}
+.noms .f2{font-size:34px;color:var(--nuit)}
+.noms .f3{font-size:50px;color:#c9861a}
+.noms .f4{font-size:66px;color:#b07a1e;font-weight:700}
+.legende-mur{display:flex;justify-content:center;gap:34px;margin-top:26px;font-size:16px;color:#aab6d6}
+.legende-mur b{font-family:var(--titre)}
+
+/* écran 3 : palmarès */
+.palmares{display:grid;grid-template-columns:300px 1fr 70px;gap:14px 22px;align-items:center;max-width:1300px;margin-top:10px}
+.palmares .nom{font:700 26px var(--titre);color:var(--nuit);text-align:right}
+.palmares .barre{height:34px}
+.palmares .barre.fid{background:var(--or)}
+.palmares .barre.std{background:var(--nuit3)}
+.palmares .val{font:700 26px var(--titre);color:var(--ambre)}
+
+/* écran 4 : par édition */
+.histo{display:flex;align-items:flex-end;gap:26px;height:470px;margin:30px 0 0 10px;border-bottom:2px solid var(--trait);padding:0 10px}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.col .n{font:700 34px var(--titre);color:var(--nuit);margin-bottom:8px;opacity:0;transition:opacity .6s ease var(--d)}
+.col .b{width:100%;max-width:92px;background:var(--nuit);border-radius:6px 6px 0 0;height:calc(var(--h)*100%);transform:scaleY(0);transform-origin:bottom;transition:transform 1s cubic-bezier(.2,.7,.2,1) var(--d)}
+.col.or .b{background:var(--or)}
+.col.annule .b{background:repeating-linear-gradient(45deg,var(--trait) 0 8px,#fff 8px 16px);border:1px dashed var(--gris)}
+.vu .col .b{transform:scaleY(1)}
+.vu .col .n{opacity:1}
+.ans{display:flex;gap:26px;margin-left:10px;padding:0 10px}
+.ans div{flex:1;text-align:center;padding-top:10px;font:700 22px var(--texte);color:var(--nuit)}
+.ans small{display:block;font:400 15px var(--texte);color:var(--gris)}
+.note{font-size:17px;color:var(--gris);margin-top:16px}
+.fid-zone{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:56px;margin-top:14px;align-items:start}
+.barres{display:flex;flex-direction:column;gap:4px}
+.bar{display:grid;grid-template-columns:210px 1fr;align-items:center;gap:16px}
+.bar .nm{font:600 18px/1.2 var(--texte);color:var(--nuit);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .tr{position:relative;height:19px}
+.bar .b{height:100%;width:calc(var(--w)*100%);background:var(--nuit);border-radius:0 5px 5px 0;transform:scaleX(0);transform-origin:left;transition:transform .9s cubic-bezier(.2,.7,.2,1) var(--d)}
+.bar.top .b{background:var(--or)}
+.bar .v{position:absolute;top:50%;left:calc(var(--w)*100% + 10px);transform:translateY(-50%);font:700 20px var(--titre);color:var(--nuit);opacity:0;transition:opacity .5s var(--d);white-space:nowrap}
+.bar .v small{font:400 14px var(--texte);color:var(--gris);margin-left:4px}
+.vu .bar .b{transform:scaleX(1)}.vu .bar .v{opacity:1}
+.une-fois{background:#fff;border-radius:12px;padding:22px 24px;box-shadow:0 6px 20px rgba(11,31,77,.08)}
+.une-fois .t{font:600 18px var(--texte);color:var(--gris);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+.une-fois .t b{font:700 34px var(--titre);color:var(--or);letter-spacing:0;margin-right:6px}
+.une-fois .liste{display:flex;flex-wrap:wrap;gap:8px}
+.une-fois .liste span{font:600 16px var(--texte);color:var(--nuit);background:var(--papier);border:1px solid var(--trait);border-radius:16px;padding:4px 12px}
+
+
+/* écran 5 : merci */
+.ecran.merci{background:var(--nuit);color:#fff}
+.merci h1.grand{color:var(--or);font-size:130px}
+.merci .chapo{color:#e8ecf7;font-size:30px;margin-top:16px;max-width:1200px}
+.fideles{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 30px;margin-top:44px;max-width:1460px}
+.fideles span{font:700 32px var(--titre);color:var(--or-clair)}
+.merci .petit{margin-top:34px;font-size:20px;color:#aab6d6}
+</style>
+</head>
+<body data-page="06-fournisseurs">
+<div id="stage">
+  <header class="entete">
+    <div class="logo">RASF<small>10 ANS</small></div>
+    <div class="rubrique"><b>Nos fournisseurs partenaires</b><span>2016 – 2026</span></div>
+    <div class="num">06</div>
+  </header>
+  <main class="contenu">
+
+    <!-- 2. Mur des noms -->
+    <section class="ecran mur">
+      <h1 class="merci-titre" data-anim="zoom">Merci !</h1>
+      <p class="chapo" data-anim="fondu" style="--d:.2s">À nos fournisseurs partenaires, à nos côtés depuis 2016 : stands, démonstrations, ateliers, contributions, dons, licences, formations</p>
+      <div class="noms" id="noms" data-cascade="zoom" data-base=".3"></div>
+    </section>
+
+    <!-- 4. Par fidélité -->
+    <section class="ecran" data-label="Par fidélité">
+      <div class="sur-titre" data-anim="fondu">Les plus fidèles</div>
+      <h2 data-anim="haut">Fournisseurs partenaires par nombre d'années de présence</h2>
+      <div class="fid-zone">
+        <div class="barres" id="barres"></div>
+        <div class="une-fois" data-anim="fondu" style="--d:2s"><div class="t"><b id="nb1"></b> partenaires présents une année</div><div class="liste" id="liste1"></div></div>
+      </div>
+      <p class="note" data-anim="fondu" style="--d:2.4s">Années de présence attestées par nos archives (stands, ateliers, contributions, dons, licences, formations), 2016 – 2026 : des minimums.</p>
+    </section>
+
+
+  </main>
+  <footer class="pied"><div class="source"></div><div class="points"></div><div class="aide">← → pour avancer</div></footer>
+</div>
+<script>
+// Données : recherches/06-fournisseurs/fournisseurs.csv (nombre d'années de soutien attesté).
+// Solvay (visite 2019 « sous réserve », non vérifiée) n'est pas affichée.
+const FOURN = [
+  ["BYK-Gardner",8],["Jeulin",7],["Brant Industrie",6],["Konica Minolta",5],["Anton Paar",4],["Erichsen",4],["Labomat",4],
+  ["Ametek",3],["CEM",3],["Metrohm",3],["PerkinElmer",3],["X-Rite",3],
+  ["Agilent",2],["IMCD",2],["Krüss",2],["MAC Technologie",2],["Magritek",2],["Servilab",2],["Shimadzu",2],
+  ["AFTPVA",1],["Bio-Technofix",1],["Brioche Pasquier",1],["Coatex",1],["Datacolor",1],["DataPhysics",1],["Elcometer",1],
+  ["ES France",1],["Hanna Instruments",1],["JMP",1],["Labo Moderne",1],["Lamy Rheology",1],["LUM",1],["Malvern",1],
+  ["Minitab",1],["Monaderm",1],["MP2e",1],["MTS Systems",1],["Proxes",1],["Thermo Fisher Scientific",1],["Verder (Formulaction)",1],["VMI",1],["VWR",1]
+];
+// Mur : ordre mélangé (déterministe) pour éviter un simple classement
+const melange = FOURN.map((f,i)=>[f,(i*37)%FOURN.length]).sort((a,b)=>a[1]-b[1]).map(x=>x[0]);
+const cls = n => n>=6?"f4":n>=3?"f3":n===2?"f2":"f1";
+document.getElementById("noms").innerHTML = melange.map(([n,a])=>`<span class="${cls(a)}">${n}</span>`).join("");
+// Par fidélité : nombre d'années de soutien attesté (FOURN), du plus fidèle au moins fidèle
+const fid=FOURN.filter(f=>f[1]>=2),un=FOURN.filter(f=>f[1]===1),mx=FOURN[0][1];
+document.getElementById("barres").innerHTML=fid.map(([n,a],i)=>`<div class="bar${a>=6?" top":""}" style="--w:${(a/mx)*.85};--d:${.25+i*.07}s"><div class="nm">${n}</div><div class="tr"><div class="b"></div><div class="v">${a}<small>${a>1?"années":"année"}</small></div></div></div>`).join("");
+document.getElementById("nb1").textContent=un.length;
+document.getElementById("liste1").innerHTML=un.map(([n])=>`<span>${n}</span>`).join("");
+</script>
+<script src="commun.js"></script>
+<script src="integration.js"></script>
+</body></html>

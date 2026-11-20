@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RASF 10 ans · Présentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="commun.css">
+<style>
+/* écran 1 : titre */
+.titre-date{font:700 22px var(--texte);letter-spacing:6px;color:var(--ambre);margin-bottom:22px}
+.titre-trait{width:120px;height:4px;background:var(--or);margin:34px auto}
+.sigle{display:flex;gap:18px;justify-content:center;margin-top:10px}
+.sigle div{width:150px;padding:18px 0;border:2px solid var(--trait);border-radius:10px;background:#fff}
+.sigle b{display:block;font:700 64px var(--titre);color:var(--nuit);line-height:1}
+.sigle span{font:600 16px var(--texte);color:var(--gris);letter-spacing:1px}
+
+/* frise 2013 → création de RASF : une couleur par année ; une année par clic ou par touche (script en bas de page) */
+.frise-tl{--c13:var(--mauve);--c14:var(--vert);--c15:var(--bleu-site);--c16:var(--ambre)}
+.frise-tl .piste{position:absolute;left:0;top:0;width:3678px;height:600px;transform-origin:0 300px;transition:transform 1.4s cubic-bezier(.45,0,.2,1)}
+.frise-tl.s2 .piste{transform:translateX(-800px);transition-delay:1.9s}
+.frise-tl.s3 .piste{transform:translateX(-1063px);transition-delay:0s}
+.frise-tl.s4 .piste{transform:translateX(-2206px);transition-delay:0s}
+.frise-tl.s5 .piste{transform:translate(0,-120px) scale(.4002);transition-duration:1.6s;transition-delay:0s}
+.merci-bande.tl-merci{bottom:60px}
+.ecran:has(.frise-tl.s5) .tl-aide{opacity:0}
+#stage .pied .aide{display:none}
+.tl-merci{pointer-events:none;opacity:0;transform:translateY(40px);transition:opacity .8s ease .5s,transform .9s cubic-bezier(.2,.7,.2,1) .5s;padding:22px 34px}
+.ecran:has(.frise-tl.s5) .tl-merci{opacity:1;transform:none;pointer-events:auto}
+.tl-merci .mb-nom{font-size:44px}
+.tl-merci .mb-role{font-size:18px;margin-top:8px}
+.tl-merci .mb-droite .citation{font-size:21px}
+html.apercu .tl-merci{transition:none!important}
+/* lien vers un document et fenêtre PDF */
+.tl-doc{display:inline-block;margin-top:6px;font:700 14px var(--texte);color:var(--c14);text-decoration:none;border:1.5px solid currentColor;border-radius:20px;padding:3px 12px;cursor:pointer}
+.tl-doc:hover{background:var(--c14);color:#fff}
+.tl-doc16{color:var(--c16)}.tl-doc16:hover{background:var(--c16);color:#fff}
+.tl-doc15{color:var(--c15)}.tl-doc15:hover{background:var(--c15);color:#fff}
+.pdf-voile{position:fixed;inset:0;z-index:1000;background:rgba(5,13,36,.82);display:none;align-items:center;justify-content:center}
+.pdf-voile.ouvert{display:flex}
+.pdf-boite{position:relative;width:min(1200px,92vw);height:88vh;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.pdf-boite iframe{width:100%;height:100%;border:0}
+.pdf-fermer{position:absolute;top:10px;right:12px;z-index:2;width:40px;height:40px;border-radius:50%;border:0;background:var(--nuit);color:#fff;font:700 22px/1 var(--texte);cursor:pointer}
+.frise-tl .tl-el{opacity:0;transform:translateY(30px);transition:opacity .7s ease var(--d,0s),transform .8s cubic-bezier(.2,.7,.2,1) var(--d,0s)}
+.frise-tl.s0 .e13,.frise-tl.s1 .e14,.frise-tl.s2 .e15,.frise-tl.s3 .e16,.frise-tl.s4 .e16b{opacity:1;transform:none}
+/* le survol n'agrandit que dans la vue d'ensemble (étape 4) */
+.tl-merci{z-index:2}
+.ecran:has(.frise-tl.s5 .jalon:hover) .frise-tl{z-index:3}
+/* Vue d'ensemble : survol avec transition à l'entrée comme à la sortie */
+.frise-tl.s5 .jalon.tl-el{border-radius:10px;background-color:rgba(255,255,255,0);box-shadow:0 6px 24px rgba(5,13,36,0);transition:transform .35s cubic-bezier(.2,.7,.2,1) 0s,background-color .35s ease 0s,box-shadow .35s ease 0s,opacity .7s ease 0s,z-index 0s linear .35s;z-index:1}
+.frise-tl.s5 .jalon.tl-el:hover{transform:scale(2);background-color:#fff;box-shadow:0 6px 24px rgba(5,13,36,.25);z-index:5;transition:transform .35s cubic-bezier(.2,.7,.2,1) 0s,background-color .35s ease 0s,box-shadow .35s ease 0s,opacity .7s ease 0s,z-index 0s linear 0s}
+.frise-tl.s5 .jalon:hover .d,.frise-tl.s5 .jalon:hover .t,.frise-tl.s5 .jalon:hover .s{background:none}
+.frise-tl.s0 .jalon:hover,.frise-tl .jalon{cursor:default}
+.frise-tl .annee{position:absolute;top:6px;height:90px}
+.frise-tl .a13{left:0;width:396px}
+.frise-tl .a14{left:412px;width:434px}
+.frise-tl .a15{left:862px;width:1010px}
+.frise-tl .a16{left:1888px;width:1790px}
+.frise-tl .annee b{display:block;font:700 62px/1 var(--titre);letter-spacing:1px}
+.frise-tl .tl-barre{height:8px;margin-top:8px;border-radius:4px;transform-origin:left;transform:scaleX(0);transition:transform 1s linear}
+.frise-tl .a15 .tl-barre{transition-duration:2.6s}
+.frise-tl .a16 .tl-barre{transition-duration:1.8s}
+.frise-tl.s0 .a13 .tl-barre,.frise-tl.s1 .a14 .tl-barre,.frise-tl.s2 .a15 .tl-barre,.frise-tl.s4 .a16 .tl-barre{transform:scaleX(1)}
+.frise-tl.s3:not(.s4) .a16 .tl-barre{transform:scaleX(.314)}
+.frise-tl .a13 b,.frise-tl .y13 .d{color:var(--c13)}.frise-tl .a13 .tl-barre{background:var(--c13)}
+.frise-tl .a14 b,.frise-tl .y14 .d{color:var(--c14)}.frise-tl .a14 .tl-barre{background:var(--c14)}
+.frise-tl .a15 b,.frise-tl .y15 .d{color:var(--c15)}.frise-tl .a15 .tl-barre{background:var(--c15)}
+.frise-tl .a16 b,.frise-tl .y16 .d{color:var(--c16)}.frise-tl .a16 .tl-barre{background:var(--c16)}
+.frise-tl .y13 .pt{border-color:var(--c13)}.frise-tl .y13 .tige{background:var(--c13)}
+.frise-tl .y14 .pt{border-color:var(--c14)}.frise-tl .y14 .tige{background:var(--c14)}
+.frise-tl .y15 .pt{border-color:var(--c15)}.frise-tl .y15 .tige{background:var(--c15)}
+.frise-tl .y16 .pt{border-color:var(--c16)}.frise-tl .y16 .tige{background:var(--c16)}
+.frise-tl .y15.fort .pt{background:var(--c15)}.frise-tl .y16.fort .pt{background:var(--c16)}
+.frise.frise-tl .ligne{background:none}
+.frise.frise-tl .ligne i{right:auto;transform:scaleX(0)!important;transition:transform 1s linear .1s}
+.frise.frise-tl .ligne i.l13{left:0;width:404px;background:var(--c13)}
+.frise.frise-tl .ligne i.l14{left:404px;width:450px;background:var(--c14)}
+.frise.frise-tl .ligne i.l15{left:854px;width:1026px;background:var(--c15);transition-duration:2.6s}
+.frise.frise-tl .ligne i.l16{left:1880px;width:570px;background:var(--c16);transition-duration:1.8s}
+.frise.frise-tl .ligne i.l16b{left:2450px;width:1228px;background:var(--c16);transition-duration:2.4s}
+.frise.frise-tl.s0 .ligne i.l13,.frise.frise-tl.s1 .ligne i.l14,.frise.frise-tl.s2 .ligne i.l15,.frise.frise-tl.s3 .ligne i.l16,.frise.frise-tl.s4 .ligne i.l16b{transform:scaleX(1)!important}
+.tl-pirate{position:absolute;left:50%;top:-38px;transform:translateX(-50%) rotate(-6deg) scale(.6);opacity:0;white-space:nowrap;font:800 20px var(--texte);letter-spacing:1px;text-transform:uppercase;color:#fff;background:var(--rouge,#b0413e);border-radius:6px;padding:4px 12px;pointer-events:none;transition:opacity .25s,transform .25s}
+.frise-tl .jalon.pirate{cursor:help}
+.frise-tl .jalon.pirate .v-pirate{display:none;color:var(--rouge)}
+.frise-tl .jalon.pirate:hover .v-pirate{display:inline}
+.frise-tl .jalon.pirate:hover .v-ag{display:none}
+.an-rappel{position:absolute;left:2222px;top:6px;font:700 62px/1 var(--titre);letter-spacing:1px;color:var(--c16);opacity:0;transition:opacity .6s ease}
+.frise-tl.s4:not(.s5) .an-rappel{opacity:1;transition-delay:1.2s}
+.entete .logo{font-size:26px!important;white-space:nowrap}
+.tl-aventure{position:absolute;left:2451px;top:30px;padding-left:14px;font:italic 600 24px/1.2 var(--titre);color:var(--c16);white-space:nowrap}
+.tl-aventure::before{content:"";position:absolute;left:-1px;top:6px;height:258px;border-left:2px dashed var(--c16);opacity:.7}
+.frise-tl .jalon.tl-carte{isolation:isolate;width:250px;margin-left:-41px}
+.frise.frise-tl .jalon.tl-carte:hover .d,.frise.frise-tl .jalon.tl-carte:hover .t,.frise.frise-tl .jalon.tl-carte:hover .s{background:none}
+.frise.frise-tl .jalon.tl-carte .noms{margin-top:8px;font-size:15px;line-height:1.35;color:var(--or)}
+.frise-tl .jalon.tl-carte::before{content:"";position:absolute;left:-14px;right:-14px;z-index:-1;background:var(--nuit);border-radius:12px}
+.frise-tl .jalon.tl-carte.bas::before{top:50px;bottom:-14px}
+.frise-tl .jalon.tl-carte.haut::before{top:-14px;bottom:50px}
+.frise.frise-tl .jalon.tl-carte .d{color:var(--or)}
+.frise.frise-tl .jalon.tl-carte .t{color:#fff}
+.frise.frise-tl .jalon.tl-carte .s{color:rgba(255,255,255,.75)}
+.tl-suite{all:unset;position:absolute;z-index:7;bottom:-38px;right:64px;cursor:pointer;font:700 16px var(--texte);letter-spacing:.5px;color:var(--nuit);background:var(--or);padding:7px 18px;border-radius:20px;box-shadow:0 4px 12px rgba(11,31,77,.18);opacity:0;transform:translateY(-14px);pointer-events:none;transition:opacity .7s ease 1.2s,transform .8s cubic-bezier(.2,.7,.2,1) 1.2s,box-shadow .2s}
+.ecran:has(.frise-tl.s5) .tl-suite{opacity:1;transform:none;pointer-events:auto}
+.tl-suite:hover{box-shadow:0 14px 34px rgba(11,31,77,.35);background:#ffc93c}
+html.apercu .tl-suite{transition:none!important}
+.tl-aide{position:absolute;z-index:6;top:186px;left:470px;width:30px;height:30px;cursor:pointer;transition:left 1.4s cubic-bezier(.45,0,.2,1),opacity .4s}
+.frise-tl.s1 .tl-aide{left:920px}.frise-tl.s2 .tl-aide{left:1950px;transition-delay:0s}.frise-tl.s3 .tl-aide{left:2480px;transition-delay:0s}.frise-tl.s4 .tl-aide{left:3620px}
+.frise-tl.s5 .tl-aide{opacity:0;pointer-events:none}
+.tl-aide::after{content:"›";display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:2px solid var(--or);color:var(--ambre);font:700 20px/1 var(--texte);padding-bottom:3px;box-sizing:border-box;animation:tl-pouls 1.8s ease-in-out infinite}
+.tl-aide:hover::after{background:var(--or);color:var(--nuit)}
+@keyframes tl-pouls{0%,100%{opacity:.35;box-shadow:0 0 0 0 rgba(242,180,31,.45)}50%{opacity:1;box-shadow:0 0 0 8px rgba(242,180,31,0)}}
+html.apercu .frise-tl *{transition:none!important}
+
+/* écrans « La liste et le premier drive » (recherches/09-premier-drive.md) */
+.dr-trio{display:flex;gap:90px;margin-top:22px}
+.dr-trio > div{min-width:240px}
+.dr-trio .chiffre{font-size:80px}
+.merci-bande{position:absolute;left:64px;right:64px;bottom:40px;background:var(--nuit);border-radius:12px;padding:28px 36px;display:grid;grid-template-columns:1.1fr 1fr;gap:40px;color:#fff}
+.merci-bande .sur-titre{color:var(--or);margin-bottom:6px}
+.mb-nom{font:700 50px/1.05 var(--titre);color:#fff}
+.mb-role{font-size:20px;line-height:1.45;color:#c9d2ea;margin-top:12px}
+.mb-role b{color:var(--or)}
+.mb-droite{display:flex;flex-direction:column;justify-content:center;gap:18px;border-left:4px solid var(--or);padding-left:26px}
+.mb-droite .citation{color:#fff;font-size:24px}
+.mb-droite .citation cite{color:var(--or-clair);font-size:15px;margin-top:6px}
+.merci{position:absolute;inset:0;background:var(--nuit);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 120px}
+.merci .sur-titre{color:var(--or)}
+.merci h1.grand{color:#fff;font-size:88px}
+.merci .role{font-size:26px;color:#c9d2ea;margin-top:14px}
+.merci .role b{color:var(--or);font-weight:700}
+.merci .fait{font-size:27px;line-height:1.45;color:#fff;max-width:1150px;margin-top:34px}
+.merci .duo{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:44px;width:1300px}
+.merci .duo .q{border-left:4px solid var(--or);padding:6px 0 6px 26px;text-align:left}
+.merci .citation{color:#fff;font-size:32px}
+.merci .citation cite{color:var(--or-clair)}
+
+/* écrans « Avant RASF » (2015) */
+.av-haut{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:4px}
+.av-lettre{border-left:8px solid var(--or);padding:28px 34px}
+.av-lettre .av-date{font:700 52px var(--titre);color:var(--nuit);line-height:1}
+.av-lettre .av-date small{display:block;font:700 16px var(--texte);letter-spacing:3px;color:var(--ambre);text-transform:uppercase;margin-bottom:10px}
+.av-lettre p{font-size:24px;line-height:1.45;color:var(--encre);margin-top:18px}
+.av-lettre p b{color:var(--nuit)}
+.av-reponse{background:var(--nuit);border-radius:10px;padding:30px 36px;display:flex;flex-direction:column;justify-content:center}
+.av-reponse .citation{color:#fff;font-size:30px}
+.av-reponse .citation cite{color:var(--or-clair)}
+.av-bas-titre{font:700 15px var(--texte);letter-spacing:3px;text-transform:uppercase;color:var(--gris);margin:34px 0 12px}
+.av-chiffres{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.av-chiffres .carte{text-align:center;padding:16px 18px 18px}
+.av-chiffres .chiffre{font-size:66px}
+.av-chiffres .legende-chiffre{font-size:16px;color:var(--encre)}
+.av-chiffres .petit{font-size:14px;color:var(--gris);margin-top:4px}
+.frise .jalon .s.souvenir{font-style:italic}
+/* une couleur par année : 2015 en bleu, 2016 en or (comme la frise 2016 qui suit) */
+/* piste plus large que l'écran : on montre 2015 à taille normale, puis on dézoome jusqu'au 9 mai 2016 */
+.frise-ans .piste{position:absolute;left:0;top:0;width:2287px;height:600px;transform-origin:0 300px}
+/* 0–3,4 s : 2015 ; pause ; 5,4–7,2 s : glissement vers 2016, même taille ; 9,8–11,6 s : dézoom sur toute la frise */
+.frise-ans:has(.an15.vu) .piste{transform:translateX(0) scale(.6436);animation:piste-ans 11.6s both}
+@keyframes piste-ans{
+  0%,46.6%{transform:translateX(0) scale(1);animation-timing-function:cubic-bezier(.45,0,.2,1)}
+  62.1%,84.5%{transform:translateX(-815px) scale(1);animation-timing-function:cubic-bezier(.45,0,.2,1)}
+  100%{transform:translateX(0) scale(.6436)}}
+html.apercu .frise-ans .piste{animation:none!important}
+/* survol : la fiche d'un jalon grossit pour être lue de près */
+.frise .jalon.vu{transition:opacity .7s ease var(--d,0s),transform .25s ease}
+.frise .jalon.vu:hover{transform:scale(1.7);z-index:5;cursor:default}
+.frise .jalon.haut{transform-origin:50% 100%}
+.frise .jalon.bas{transform-origin:50% 0}
+.frise .jalon:hover .d,.frise .jalon:hover .t,.frise .jalon:hover .s{background:var(--papier)}
+.frise-ans .annee{position:absolute;top:0;height:100px}
+.frise-ans .an15{left:0;width:1304px}
+.frise-ans .an16{left:1306px;width:981px;padding-left:18px}
+.frise-ans .annee b{display:block;font:700 80px/1 var(--titre);letter-spacing:2px}
+.frise-ans .an15 b{color:var(--bleu-site)}.frise-ans .an16 b{color:var(--or)}
+.frise-ans .annee .barre{height:8px;margin-top:8px;border-radius:4px;transition-duration:3s}
+.frise-ans .an15 .barre{background:var(--bleu-site)}
+.frise-ans .an16 .barre{background:var(--or);transition-duration:1.6s}
+.frise-ans .jalon.fort-rasf .t{color:var(--rouge)}
+.frise.frise-ans .ligne{background:none}
+.frise.frise-ans .ligne i.l15{right:auto;width:1304px;background:var(--bleu-site);transform:scaleX(0);transition:transform 3s linear .2s}
+.frise.frise-ans .ligne i.l16{left:1304px;background:var(--or);transform:scaleX(0);transition:transform 2.6s linear 5.4s}
+.frise.frise-ans:has(.an15.vu) .ligne i.l15,.frise.frise-ans:has(.an15.vu) .ligne i.l16{transform:scaleX(1)}
+.frise-ans .jalon.a15 .d{color:var(--bleu-site)}
+.frise-ans .jalon.a15 .pt{border-color:var(--bleu-site)}
+.frise-ans .jalon.a15 .tige{background:var(--bleu-site)}
+.frise-ans .jalon.a15.fort .pt{background:var(--bleu-site)}
+
+/* écran 2 : le besoin */
+.trois{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:20px}
+.trois .carte{padding:30px 30px 34px;border-top:6px solid var(--or)}
+.trois .num-etape{font:700 54px var(--titre);color:var(--or);line-height:1}
+.trois h3{font:700 30px var(--titre);color:var(--nuit);margin:10px 0 12px}
+.trois p{font-size:22px;line-height:1.4;color:var(--gris)}
+.fleche-bas{text-align:center;font-size:40px;color:var(--or);margin:18px 0 6px}
+.conclusion{background:var(--nuit);color:#fff;border-radius:10px;padding:26px 34px;display:flex;align-items:center;gap:28px}
+.conclusion .citation{color:#fff;font-size:28px}
+.conclusion .citation cite{color:var(--or-clair)}
+.conclusion .explication{display:block;font:600 24px var(--texte);font-style:normal;color:#fff;margin-top:12px}
+
+/* écran 3 : frise */
+.frise{position:relative;height:600px;margin-top:6px}
+.frise .ligne{position:absolute;left:0;right:0;top:300px;height:6px;background:var(--trait);border-radius:3px}
+.frise .ligne i{position:absolute;inset:0;background:var(--or);border-radius:3px;transform-origin:left;transform:scaleX(0);transition:transform 3.2s cubic-bezier(.3,.6,.3,1) .2s}
+.ecran.vu .frise .ligne i{transform:scaleX(1)}
+.jalon{position:absolute;width:168px;text-align:center}
+.jalon .pt{position:absolute;left:50%;width:22px;height:22px;margin-left:-11px;border-radius:50%;background:var(--papier);border:5px solid var(--or)}
+.jalon .tige{position:absolute;left:50%;width:2px;margin-left:-1px;background:var(--or)}
+.jalon .d{font:700 22px var(--titre);color:var(--ambre)}
+.jalon .t{font:700 21px var(--texte);color:var(--nuit);line-height:1.2;margin-top:4px}
+.jalon .s{font-size:16px;color:var(--gris);line-height:1.3;margin-top:4px}
+.jalon.haut{bottom:300px;padding-bottom:58px}
+.jalon.haut .pt{bottom:-8px}.jalon.haut .tige{bottom:14px;height:40px}
+.jalon.bas{top:306px;padding-top:58px}
+.jalon.bas .pt{top:-14px}.jalon.bas .tige{top:8px;height:40px}
+.jalon.fort .pt{background:var(--or);width:30px;height:30px;margin-left:-15px}
+.jalon.fort .t{color:var(--rouge)}
+
+/* écran 4 : chiffres */
+.grille-chiffres{display:grid;grid-template-columns:repeat(3,1fr);gap:26px 34px;margin-top:8px}
+.grille-chiffres .carte{text-align:center;padding:26px 20px}
+.grille-chiffres .chiffre{font-size:92px}
+.grille-chiffres .legende-chiffre{font-size:18px;color:var(--encre)}
+.grille-chiffres .petit{font-size:15px;color:var(--gris);margin-top:6px}
+.guadeloupe .chiffre{font-size:58px;line-height:1.6}
+.note{font-size:16px;color:var(--gris);margin-top:16px;text-align:center}
+
+/* écran 5 : témoignages et lendemain */
+.deux{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:6px}
+.bloc-sombre{background:var(--nuit);color:#fff;border-radius:10px;padding:34px 38px}
+.bloc-sombre h3{font:700 34px var(--titre);color:var(--or);margin-bottom:16px}
+.bloc-sombre p{font-size:23px;line-height:1.45;color:#dfe5f3;margin-bottom:14px}
+.bloc-sombre .barre-x{font-weight:700;color:#ff8a80}
+.temoignages .citation{font-size:26px;margin-bottom:26px}
+
+/* écran 6 : PNF de juin */
+.pnf{display:grid;grid-template-columns:1.25fr 1fr;gap:44px;margin-top:6px}
+.themes{display:flex;gap:16px;flex-wrap:wrap}
+.themes span{background:var(--nuit);color:var(--or);font:700 28px var(--titre);padding:14px 26px;border-radius:40px}
+.pnf-chiffres{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:30px 0 24px}
+.pnf-chiffres .chiffre{font-size:84px}
+.pnf-chiffres .legende-chiffre{font-size:16px;line-height:1.35}
+.orga{font-size:26px;color:var(--gris)}
+.orga b{color:var(--nuit)}
+.pnf-ateliers h3{font:700 30px var(--titre);color:var(--nuit);margin-bottom:6px}
+.pnf-cecile{padding:18px 24px;border-left:6px solid var(--or)}
+.pnf-cecile p{font-size:20px;line-height:1.4;color:var(--gris);margin-top:8px}
+.pnf-cecile p b{color:var(--nuit)}
+.pnf-suite{font-size:18px;color:var(--gris);margin-top:16px;line-height:1.4}
+.pnf-ateliers ul{list-style:none}
+.pnf-ateliers li{padding:8px 0;border-bottom:1px solid var(--trait)}
+.pnf-ateliers li b{display:block;font-size:21px;color:var(--nuit)}
+.pnf-ateliers li span{font-size:16px;color:var(--ambre);font-weight:600}
+.pnf-ateliers .partage{font-size:18px;color:var(--gris);margin-top:16px;line-height:1.4}
+
+/* écran 7 : fondateurs */
+.fondateurs{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin:30px 0 26px;width:1300px}
+.fondateur{background:#fff;border:1px solid var(--trait);border-radius:12px;padding:30px 16px}
+.fondateur .rond{width:118px;height:118px;border-radius:50%;margin:0 auto 18px;background:var(--nuit);color:var(--or);display:flex;align-items:center;justify-content:center;font:700 44px var(--titre)}
+.fondateur b{display:block;font:700 28px var(--titre);color:var(--nuit);line-height:1.15}
+
+/* Couverture « Nuit profonde » (variante C de bandeau-variantes.html) */
+#stage:has(.couverture.actif){grid-template-rows:0 1fr 0}
+#stage:has(.couverture.actif) .entete,#stage:has(.couverture.actif) .pied{visibility:hidden}
+#stage:has(.partie.actif){grid-template-rows:0 1fr 0}
+#stage:has(.partie.actif) .entete,#stage:has(.partie.actif) .pied{visibility:hidden}
+.ecran.partie{padding:0}
+.ecran.partie iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#050d24}
+/* Fil d'Ariane dans l'en-tête */
+.pied .points{display:none}
+.entete .num{display:none}
+.ariane{display:flex;align-items:baseline;gap:14px;border-left:2px solid rgba(242,180,31,.5);padding-left:28px;font:600 20px var(--texte);color:#c9d2ea}
+.ariane button{all:unset;cursor:pointer;color:#c9d2ea;border-bottom:1px dashed rgba(201,210,234,.4)}
+.ariane button:hover{color:var(--or);border-bottom-color:var(--or)}
+.ariane i{font-style:normal;color:var(--or);opacity:.7}
+.ariane b{font:700 22px var(--titre);color:#fff}
+.ecran.couverture{padding:0;background:radial-gradient(120% 140% at 25% 50%,#1a3470 0%,#0B1F4D 45%,#050d24 100%);color:#fff;gap:80px;flex-direction:row}
+.couverture .logo10{width:400px;flex:none}
+.couverture .texte{text-align:center}
+.couverture .rasf{font:700 230px/.95 var(--titre);letter-spacing:6px;color:#fff}
+.couverture .ans{display:flex;align-items:center;gap:30px;justify-content:center;font:700 70px/1 var(--titre);letter-spacing:5px;margin-top:14px;color:var(--or)}
+.couverture .ans::before,.couverture .ans::after{content:"";height:4px;width:140px;background:var(--or)}
+.couverture .nom{font:600 36px/1.2 var(--texte);margin-top:34px;color:#aab6d8}
+.couverture .date{font:600 34px/1 var(--titre);margin-top:30px;color:#fff;letter-spacing:1px}
+.couverture .demarrer{all:unset;cursor:pointer;margin-top:44px;display:inline-block;font:700 30px var(--texte);letter-spacing:2px;color:var(--nuit);background:var(--or);padding:16px 46px;border-radius:40px;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:transform .2s,box-shadow .2s}
+.couverture .demarrer:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 14px 36px rgba(0,0,0,.45)}
+.code-photos{position:absolute;right:40px;bottom:32px;display:flex;align-items:center;gap:8px;opacity:.55;transition:opacity .2s}
+.code-photos:hover,.code-photos:focus-within{opacity:1}
+.code-photos .cp-etat{font:600 15px var(--texte);color:#aab6d8}
+.code-photos input{width:170px;background:rgba(255,255,255,.08);border:1px solid rgba(242,180,31,.35);border-radius:6px;color:#fff;padding:7px 10px;font:15px var(--texte)}
+.code-photos input:focus{outline:none;border-color:var(--or)}
+.code-photos button{all:unset;cursor:pointer;background:var(--or);color:var(--nuit);font:700 14px var(--texte);padding:7px 12px;border-radius:6px}
+.code-photos.ok input,.code-photos.ok button{display:none}
+.code-photos.ok .cp-etat{color:var(--or);cursor:pointer}
+.couverture .url{font:600 28px/1 var(--texte);letter-spacing:7px;margin-top:22px;color:#8f9ac0}
+
+/* Menu général : une tuile par partie */
+.menu-tuiles{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:36px}
+.tuile-m{all:unset;box-sizing:border-box;cursor:pointer;position:relative;display:flex;flex-direction:column;justify-content:flex-end;height:280px;padding:26px 28px;border-radius:14px;background:var(--nuit);color:#fff;overflow:hidden;transition:transform .25s ease,box-shadow .25s ease}
+.tuile-m:hover{transform:translateY(-6px);box-shadow:0 14px 34px rgba(5,13,36,.3)}
+.tuile-m::before{content:"";position:absolute;left:0;top:0;right:0;height:8px;background:var(--c,var(--or))}
+.tuile-m .n{position:absolute;top:22px;left:28px;font:700 46px/1 var(--titre);color:var(--c,var(--or))}
+.tuile-m b{font:700 30px/1.15 var(--titre)}
+.tuile-m small{font-size:18px;color:#aab6d8;margin-top:10px;line-height:1.3}
+.tuile-m.une{grid-column:span 2;background:radial-gradient(120% 140% at 20% 30%,#1a3470 0%,#0B1F4D 60%,#050d24 100%)}
+.tuile-m.une b{font-size:40px}
+</style>
+</head>
+<body data-page="presentation">
+<div id="stage">
+  <header class="entete">
+    <div class="logo">Bilan RASF<small>10 ANS</small></div>
+    <nav class="ariane" aria-label="Fil d'Ariane"></nav>
+    <div class="num">01</div>
+  </header>
+  <main class="contenu">
+
+    <!-- 1 bis. Frise 2013 → création de RASF : une couleur par année, une année par clic (recherches/09, 11 et 01) -->
+    <!-- 0. Couverture : bandeau des 10 ans, variante « Nuit profonde » -->
+    <section class="ecran centre couverture" id="ecran-couv">
+      <svg class="logo10" viewBox="44 120 104 72" aria-hidden="true" data-anim="zoom" style="--d:.1s">
+        <g font-family="Source Sans 3" font-weight="700" font-size="17" text-anchor="middle" fill="#fff">
+          <g fill="none" stroke="#fff" stroke-width="1.6">
+            <polygon points="80,124 96,133 96,151 80,160 64,151 64,133"/>
+            <polygon points="64,152 80,161 80,179 64,188 48,179 48,161"/>
+            <polygon points="96,152 112,161 112,179 96,188 80,179 80,161"/>
+            <polygon points="128,152 144,161 144,179 128,188 112,179 112,161"/>
+          </g>
+          <text x="80" y="148">R</text><text x="64" y="176">A</text><text x="96" y="176">S</text><text x="128" y="176">F</text>
+        </g>
+      </svg>
+      <div class="texte">
+        <div class="rasf" data-anim="haut" style="--d:.3s">RASF</div>
+        <div class="ans" data-anim="fondu" style="--d:.7s">10 ANS</div>
+        <div class="nom" data-anim="haut" style="--d:1s">Réseau Analyse, Synthèse et Formulation</div>
+        <div class="date" data-anim="haut" style="--d:1.3s">20 novembre 2026</div>
+        <div class="url" data-anim="fondu" style="--d:1.6s">www.rasf.fr</div>
+        <button class="demarrer" data-clic data-aller="ecran-menu" data-anim="haut" style="--d:2s">Le bilan&nbsp;→</button>
+      </div>
+      <form class="code-photos" id="codePhotos" data-clic autocomplete="off">
+        <span class="cp-etat" id="cpEtat">🔒 Photos</span>
+        <input id="cpIn" type="password" placeholder="code des photos" aria-label="Code des photos">
+        <button type="submit">OK</button>
+      </form>
+    </section>
+
+    <!-- 0 bis. Menu général : une tuile par partie -->
+    <section class="ecran" id="ecran-menu" data-rubrique="Accueil">
+      <div class="sur-titre" data-anim="fondu">RASF · 10 ans</div>
+      <h2 data-anim="haut" style="margin-bottom:0">Bilan des 10 ans de RASF</h2>
+      <div class="menu-tuiles" data-cascade="haut" data-base=".2">
+        <button class="tuile-m une" data-clic data-aller="ecran-tl" style="--c:var(--or)"><span class="n">1</span><b>De la liste nationale à la concrétisation de RASF</b><small>2013 – 2016</small></button>
+        <button class="tuile-m" data-clic data-aller="partie-02" style="--c:#4f8fd6"><span class="n">2</span><b>Les Journées RASF</b><small>Les programmes, de 2016 à 2026</small></button>
+        <button class="tuile-m" data-clic data-aller="partie-03" style="--c:#3fae8f"><span class="n">3</span><b>R comme Réseau</b><small>Carte, adhésions, bureau</small></button>
+        <button class="tuile-m une" data-clic data-aller="partie-05" style="--c:#e08a3c"><span class="n">4</span><b>Nos fournisseurs</b><small>Les partenaires depuis 2016</small></button>
+        <button class="tuile-m une" data-clic data-aller="partie-07" style="--c:#d9c27a"><span class="n">5</span><b>Depuis 2025</b><small>Les chantiers de Christophe Roussel</small></button>
+      </div>
+    </section>
+
+    <section class="ecran" id="ecran-tl" data-rubrique="1 · Les origines, 2013 – 2016">
+      <button class="tl-suite" data-clic data-aller="partie-02">Les Journées RASF&nbsp;→</button>
+      <div class="sur-titre" data-anim="fondu">Juin 2013 → octobre 2016</div>
+      <h2 data-anim="haut" style="margin-bottom:0">De la liste nationale à la concrétisation de RASF</h2>
+      <div class="frise frise-tl">
+        <div class="piste">
+          <div class="annee a13 e13 tl-el" style="--d:0s"><b>2013</b><div class="tl-barre"></div></div>
+          <div class="annee a14 e14 tl-el" style="--d:0s"><b>2014</b><div class="tl-barre"></div></div>
+          <div class="annee a15 e15 tl-el" style="--d:0s"><b>2015</b><div class="tl-barre"></div></div>
+          <div class="annee a16 e16 tl-el" style="--d:.3s"><b>2016</b><div class="tl-barre"></div></div>
+          <div class="tl-aide" data-clic title="Cliquer ou appuyer sur → pour la suite"></div>
+          <div class="an-rappel">2016</div>
+          <div class="tl-aventure e16b tl-el" style="--d:3.1s">À partir d'ici, les premiers échanges entre les membres de RASF →</div>
+          <div class="ligne"><i class="l13"></i><i class="l14"></i><i class="l15"></i><i class="l16"></i><i class="l16b"></i></div>
+          <div class="jalon haut y13 e13 tl-el" style="left:0px;--d:0.4s"><div class="d">juin 2013</div><div class="t">La liste nationale</div><div class="s">lancée avec Micheline Izbicki</div><div class="tige"></div><div class="pt"></div></div>
+          <div class="jalon bas y13 e13 tl-el" style="left:190px;--d:1.0s"><div class="pt"></div><div class="tige"></div><div class="d">déc. 2013</div><div class="t">Rapport d'opportunité en CPC</div><div class="s">1er acte officiel de la réforme</div></div>
+          <div class="jalon haut y14 e14 tl-el" style="left:450px;--d:0.4s"><div class="d">juin 2014</div><div class="t">Référentiel d'activités en CPC</div><div class="s">les tâches du futur technicien</div><div class="tige"></div><div class="pt"></div></div>
+          <div class="jalon bas y14 e14 tl-el" style="left:640px;--d:1.0s"><div class="pt"></div><div class="tige"></div><div class="d">21 nov. 2014</div><div class="t">Annonce du BTS Métiers de la chimie</div><div class="s">Maison de la Chimie, M.-B. Mauhourat (IGEN)</div><a class="tl-doc" data-clic href="documents/2014-11-21-mauhourat-bts-metiers-de-la-chimie.pdf" data-pdf>📄 voir le diaporama</a></div>
+          <div class="jalon haut y15 e15 tl-el" style="left:900px;--d:0.4s"><div class="d">17 – 20 mars 2015</div><div class="t">JIREC à Poitiers</div><div class="s">des interventions sur la formulation</div><div class="tige"></div><div class="pt"></div></div>
+          <div class="jalon bas y15 e15 tl-el" style="left:1063px;--d:0.7s"><div class="pt"></div><div class="tige"></div><div class="d">23 juin</div><div class="t">La première version du référentiel</div><div class="s">présentée en CPC · 144 pages</div><a class="tl-doc tl-doc15" data-clic href="documents/2015-06-23-referentiel-bts-metiers-de-la-chimie-cpc.pdf" data-pdf>📄 voir le référentiel</a></div>
+          <div class="jalon haut y15 e15 tl-el" style="left:1226px;--d:1.0s"><div class="d">16 oct.</div><div class="t">Premier drive partagé</div><div class="s">créé par Philippe Goutverg (Reims)</div><div class="tige"></div><div class="pt"></div></div>
+          <div class="jalon bas fort y15 e15 tl-el" style="left:1389px;--d:1.8s"><div class="pt"></div><div class="tige"></div><div class="d">17 oct.</div><div class="t">Visite à Valenciennes</div><div class="s">le BTS PEA et ses ateliers</div></div>
+          <div class="jalon haut y15 e15 tl-el" style="left:1552px;--d:2.1s"><div class="d">21 nov.</div><div class="t">La liste devient «&nbsp;BTS&nbsp;MDC&nbsp;»</div><div class="s">plus de 200 profs inscrits</div><div class="tige"></div><div class="pt"></div></div>
+          <div class="jalon bas fort y15 e15 tl-el" style="left:1715px;--d:2.4s"><div class="pt"></div><div class="tige"></div><div class="d">18 déc.</div><div class="t">L'idée du salon</div><div class="s">faire venir gratuitement un maximum de profs à la rencontre des fournisseurs</div></div>
+          <div class="jalon haut y16 e16 tl-el" style="left:1878px;--d:0.8s"><div class="d">11 janv. 2016</div><div class="t">Lettre aux fournisseurs</div><div class="s">premiers «&nbsp;oui&nbsp;» : Labomat dès le 12&nbsp;janv., puis Altana (BYK) le&nbsp;15</div><div class="tige"></div><div class="pt"></div></div>
+          <div class="jalon bas y16 e16 tl-el" style="left:2041px;--d:1.1s"><div class="pt"></div><div class="tige"></div><div class="d">21 janv.</div><div class="t">Projet de création de l'association</div><div class="s">pour financer le salon</div></div>
+          <div class="jalon haut y16 e16 tl-el" style="left:2204px;--d:1.4s"><div class="d">3 mars</div><div class="t">Statuts de RASF</div><div class="s">« à vocation nationale »</div><div class="tige"></div><div class="pt"></div></div>
+          <div class="jalon bas fort tl-carte y16 e16 tl-el" style="left:2367px;--d:1.8s"><div class="pt"></div><div class="tige"></div><div class="d">14 mars 2016</div><div class="t">Création de RASF</div><div class="s">assemblée générale constitutive</div><div class="s noms">Nathalie Pierquet · Xavier Bataille<br>Youri Halberstadt · Marc-Olivier Reula</div></div>
+          <div class="jalon haut y16 e16b tl-el" style="left:2530px;--d:0.9s"><div class="d">5 avr.</div><div class="t">Le PNF de mai est reporté</div><div class="s">il n'aura lieu que les 12 et 13&nbsp;octobre</div><div class="tige"></div><div class="pt"></div></div>
+          <div class="jalon bas y16 e16b tl-el pirate" style="left:2693px;--d:1.2s"><div class="pt"></div><div class="tige"></div><div class="d">11 avr.</div><div class="t">Xavier propose <span class="v-ag">une «&nbsp;AG de RASF&nbsp;»</span><span class="v-pirate">un «&nbsp;PNF pirate&nbsp;» 🏴‍☠️</span></div><div class="s">le 10&nbsp;mai, au lendemain du salon</div></div>
+          <div class="jalon haut fort y16 e16b tl-el" style="left:2856px;--d:1.5s"><div class="d">9 mai</div><div class="t">Le salon des fournisseurs</div><div class="s">plus de 150 personnes se rencontrent</div><div class="tige"></div><div class="pt"></div></div>
+          <div class="jalon bas fort y16 e16b tl-el" style="left:3019px;--d:1.8s"><div class="pt"></div><div class="tige"></div><div class="d">10 mai</div><div class="t">L'AG de RASF</div><div class="s">référentiel, modules, projet, CCF : 6 présentations</div><a class="tl-doc tl-doc16" data-clic href="documents/2016-05-10-ag-rasf-presentations.pdf" data-pdf>📄 voir les présentations</a></div>
+          <div class="jalon bas y16 e16b tl-el" style="left:3182px;--d:2.1s"><div class="pt"></div><div class="tige"></div><div class="d">6 – 8 juin</div><div class="t">Formation métrologie, plans d'expériences, qualité</div><div class="s">organisée par Cécile Bruyère (IGEN en devenir) · 7 ateliers</div><a class="tl-doc tl-doc16" data-clic href="documents/2016-06-formation-metrologie-ateliers.pdf" data-pdf>📄 voir les ateliers</a></div>
+          <div class="jalon haut fort tl-carte y16 e16b tl-el" style="left:3345px;--d:2.4s"><div class="d">sept. 2016</div><div class="t">Ouverture du BTS</div><div class="s">dans près de 30 lycées</div><div class="tige"></div><div class="pt"></div></div>
+          <div class="jalon bas fort y16 e16b tl-el" style="left:3508px;--d:2.7s"><div class="pt"></div><div class="tige"></div><div class="d">12 – 13 oct. 2016</div><div class="t">Le PNF officiel</div><div class="s">au lycée Raspail, Paris</div><a class="tl-doc tl-doc16" data-clic href="documents/2016-10-12-pnf-programme.pdf" data-pdf>📄 voir le programme</a></div>
+        </div>
+      </div>
+      <div class="merci-bande tl-merci">
+        <div class="mb-gauche">
+          <div class="sur-titre">Celle qui a réuni tout le monde</div>
+          <div class="mb-nom">Merci Micheline Izbicki</div>
+          <div class="mb-role">Ancienne présidente de l'<b>UdPPC</b>, l'Union des professeurs de physique et de chimie. En juin 2013, elle est à l'origine de la liste nationale des profs du BTS Chimiste : la liste «&nbsp;qui a donné naissance à&nbsp;RASF&nbsp;».</div>
+        </div>
+        <div class="mb-droite">
+          <div class="citation">« Bravo pour l'évolution de la liste, enfin elle vit et sert&nbsp;!!!!&nbsp;»<cite>Micheline Izbicki, décembre 2015</cite></div>
+          <div class="citation">« Nous ne la remercierons jamais assez.&nbsp;»<cite>Philippe Goutverg, septembre 2020</cite></div>
+        </div>
+    </section>
+
+
+    <!-- Partie 02 : Les Journées (02-journees.html), intégrée en plein écran -->
+    <section class="ecran partie" id="partie-02" data-rubrique="2 · Les Journées RASF"><iframe data-src="02-journees.html" title="Les Journées"></iframe></section>
+
+    <!-- Partie 03 : Notre réseau (03-membres.html), intégrée en plein écran -->
+    <section class="ecran partie" id="partie-03" data-rubrique="3 · R comme Réseau"><iframe data-src="03-membres.html" title="R comme Réseau"></iframe></section>
+
+    <!-- Partie 05 : Nos fournisseurs (06-fournisseurs.html), intégrée en plein écran -->
+    <section class="ecran partie" id="partie-05" data-rubrique="4 · Nos fournisseurs"><iframe data-src="06-fournisseurs.html" title="Nos fournisseurs"></iframe></section>
+
+    <!-- Partie 07 : Depuis 2025 (11-presidence-roussel.html), intégrée en plein écran -->
+    <section class="ecran partie" id="partie-07" data-rubrique="5 · Depuis 2025"><iframe data-src="11-presidence-roussel.html" title="Depuis 2025"></iframe></section>
+
+  </main>
+  <footer class="pied"><div class="source"></div><div class="points"></div><div class="aide">← → pour avancer</div></footer>
+</div>
+<script src="coffre.js"></script>
+<script src="commun.js"></script>
+<script>
+/* Frise 2013 → RASF : une étape par clic ou par touche (→, espace, Page suivante). 0 = 2013, 1 = 2014, 2 = 2015, 3 = 2016, 4 = vue d'ensemble avec le merci à Micheline Izbicki. */
+(function(){
+  const sec=document.getElementById("ecran-tl"); if(!sec) return;
+  const fr=sec.querySelector(".frise-tl"), aide=sec.querySelector(".tl-aide");
+  aide.addEventListener("click",ev=>{ev.stopPropagation();document.body.dispatchEvent(new KeyboardEvent("keydown",{key:"ArrowRight",bubbles:true}))});
+  const idx=[...document.querySelectorAll(".ecran")].indexOf(sec), MAX=5;
+  let etape=-1;
+  const ici=()=>window.RASF&&RASF.courant===idx;
+  function poser(n){etape=n;for(let k=0;k<=MAX;k++)fr.classList.toggle("s"+k,k<=n);aide.title=n<3?"Année suivante (→)":n<4?"Suite de 2016 (→)":"Vue d'ensemble (→)"}
+  function entrer(){poser(-1);if(document.documentElement.classList.contains("apercu")){poser(MAX);return}requestAnimationFrame(()=>requestAnimationFrame(()=>poser(0)))}
+  document.addEventListener("ecran",e=>{if(e.detail.el===sec)entrer();else poser(-1)});
+  if(ici())entrer();
+  addEventListener("keydown",ev=>{if(!ici()||etape>=MAX||document.querySelector(".pdf-voile.ouvert"))return;if(["ArrowRight"," ","PageDown"].includes(ev.key)){ev.preventDefault();ev.stopImmediatePropagation();poser(etape+1)}},true);
+  document.addEventListener("click",ev=>{if(!ici()||etape>=MAX)return;if(ev.target.closest("a,button,input,select,.pied,[data-clic]"))return;const st=document.getElementById("stage").getBoundingClientRect();if(ev.clientX>st.left+st.width/2){ev.stopPropagation();poser(etape+1)}},true);
+})();
+</script>
+<div class="pdf-voile" id="pdf-voile"><div class="pdf-boite"><button class="pdf-fermer" type="button" aria-label="Fermer">×</button><iframe title="Document"></iframe></div></div>
+<script>
+/* Ouvre les liens [data-pdf] dans une fenêtre par-dessus la page ; Échap ou × pour fermer. */
+(function(){
+  const v=document.getElementById("pdf-voile"), f=v.querySelector("iframe");
+  const fermer=()=>{v.classList.remove("ouvert");f.src="about:blank"};
+  document.addEventListener("click",ev=>{const a=ev.target.closest("a[data-pdf]");if(!a)return;ev.preventDefault();ev.stopPropagation();f.src=a.getAttribute("href");v.classList.add("ouvert")},true);
+  v.addEventListener("click",ev=>{if(ev.target===v||ev.target.closest(".pdf-fermer"))fermer()});
+  addEventListener("keydown",ev=>{if(!v.classList.contains("ouvert"))return;ev.stopImmediatePropagation();if(ev.key==="Escape")fermer()},true);
+})();
+</script>
+<script>
+/* En-tête : la rubrique suit l'écran affiché */
+function rubrique(el){const r=el&&el.dataset.rubrique;if(!r)return;const a=document.querySelector(".entete .ariane");
+ const lien=(t,id)=>`<button data-clic data-aller="${id}">${t}</button>`;
+ a.innerHTML=r==="Accueil"?`<b>Accueil</b>`:`${lien("Accueil","ecran-menu")}<i>›</i><b>${r}</b>`}
+/* Le logo « RASF 10 ANS » ramène à la page de couverture */
+{const lg=document.querySelector(".entete .logo");lg.setAttribute("data-clic","");lg.setAttribute("data-aller","ecran-couv");lg.style.cursor="pointer";lg.title="Retour à la page de couverture"}
+document.addEventListener("ecran",e=>rubrique(e.detail.el));
+if(window.RASF)rubrique(document.querySelectorAll(".ecran")[RASF.courant]);
+/* Menu : la tuile 1 mène à la frise, les autres ouvrent leur page */
+document.addEventListener("click",ev=>{const t=ev.target.closest("[data-aller]");if(!t)return;ev.preventDefault();const el=document.getElementById(t.dataset.aller);const i=[...document.querySelectorAll(".ecran")].indexOf(el);if(i>=0&&window.RASF)RASF.montrer(i)});
+</script>
+<script>
+/* Parties intégrées : chaque page tourne dans son cadre avec ses propres animations.
+   Les pages parlent à la présentation par postMessage (integration.js), ce qui marche aussi en file://.
+   Au dernier écran d'une partie, → passe à la suivante ; au premier, ← revient à la précédente ; Échap ou « ← Sommaire » ramène au sommaire. */
+(function(){
+  const ecrans=()=>[...document.querySelectorAll("#stage .contenu > .ecran")];
+  const aller=id=>{const i=ecrans().indexOf(document.getElementById(id));if(i>=0){RASF.montrer(i);window.focus()}};
+  let versLaFin=false;
+  addEventListener("message",ev=>{const m=(ev.data||{}).rasf;if(!m)return;
+    if(m==="sommaire")aller("ecran-menu");
+    if(m==="accueil")aller("ecran-couv");
+    if(m==="suivant"){if(RASF.courant<ecrans().length-1){versLaFin=false;RASF.montrer(RASF.courant+1)}else aller("ecran-menu")}
+    if(m==="precedent"&&RASF.courant>0){versLaFin=true;RASF.montrer(RASF.courant-1)}
+    if(m==="ancre"&&ev.data.v){try{history.replaceState(null,"","#"+ev.data.v)}catch(e){}}});
+  /* Une adresse par écran : #accueil, #sommaire, #origines, #journees-2019, #reseau… */
+  const ANCRES={"ecran-couv":"accueil","ecran-menu":"sommaire","ecran-tl":"origines","partie-02":"journees","partie-03":"reseau","partie-05":"fournisseurs","partie-07":"depuis-2025"};
+  let anneeDemandee="";
+  /* Tuile « Les Journées RASF » (sommaire) et bouton de fin de frise : on arrive toujours sur Paris 2016 */
+  document.addEventListener("click",ev=>{const t=ev.target.closest('[data-aller="partie-02"]');if(t)anneeDemandee="2016"},true);
+  document.addEventListener("ecran",e=>{const a=ANCRES[e.detail.el.id];if(a&&!(a==="journees"&&/^#journees-/.test(location.hash)&&e.detail.el.querySelector("iframe").getAttribute("src")))try{history.replaceState(null,"","#"+a)}catch(err){}});
+  function suivreAncre(){const h=location.hash.slice(1);if(!h)return;let id=Object.keys(ANCRES).find(k=>ANCRES[k]===h);
+    const mj=h.match(/^journees-(\d{4})$/);if(mj){id="partie-02";anneeDemandee=mj[1]}
+    if(!id)return;const i=ecrans().indexOf(document.getElementById(id));if(i>=0&&i!==RASF.courant)RASF.montrer(i);
+    else if(mj){const f=document.querySelector("#partie-02 iframe");if(f&&f.getAttribute("src")){f.contentWindow.postMessage({rasf:"annee",v:mj[1]},"*");anneeDemandee=""}}}
+  addEventListener("hashchange",suivreAncre);
+  addEventListener("keydown",ev=>{if(ev.key==="Escape"&&!document.querySelector(".pdf-voile.ouvert")&&RASF.courant>1)aller("ecran-menu")});
+  /* ← depuis l'écran qui suit une partie : arriver à la fin de cette partie */
+  addEventListener("keydown",ev=>{if(["ArrowLeft","PageUp"].includes(ev.key))versLaFin=true},true);
+  function entrer(sec){
+    const f=sec.querySelector("iframe");if(!f)return;
+    const placer=()=>{f.contentWindow.postMessage({rasf:"nom",nom:sec.dataset.rubrique||""},"*");{const E=ecrans(),i=E.indexOf(sec),lib=x=>x?((x.dataset.rubrique||"").replace(/^\d+ · /,"")):"";f.contentWindow.postMessage({rasf:"voisins",prec:lib(E[i-1])||"Accueil",suiv:lib(E[i+1])||"Accueil"},"*")}f.contentWindow.postMessage({rasf:versLaFin?"fin":"debut"},"*");versLaFin=false;f.focus()};
+    if(!f.getAttribute("src")){f.addEventListener("load",placer,{once:true});f.src=f.dataset.src+(sec.id==="partie-02"?"?t=":"?ecran=0&t=")+Date.now()+(sec.id==="partie-02"&&anneeDemandee?"#"+anneeDemandee:"")}else{if(sec.id==="partie-02"&&anneeDemandee)f.contentWindow.postMessage({rasf:"annee",v:anneeDemandee},"*");placer()}anneeDemandee="";
+  }
+  document.addEventListener("ecran",e=>{if(e.detail.el.classList.contains("partie"))entrer(e.detail.el);else{window.focus();versLaFin=false}});
+  if(window.RASF){suivreAncre();const e=ecrans()[RASF.courant];if(e&&e.classList.contains("partie")&&!e.querySelector("iframe").getAttribute("src"))entrer(e)}
+})();
+</script>
+<script>
+/* Code des photos (même coffre que index.html) : mémorisé dans le navigateur ; les parties déjà ouvertes sont rechargées */
+(function(){
+  const f=document.getElementById("codePhotos"),etat=document.getElementById("cpEtat"),inp=document.getElementById("cpIn");
+  function maj(){const a=!!(window.Coffre&&Coffre.code());f.classList.toggle("ok",a);etat.textContent=a?"🔓 Photos visibles":"🔒 Photos";etat.title=a?"Cliquer pour oublier le code":""}
+  f.addEventListener("submit",async e=>{e.preventDefault();e.stopPropagation();etat.textContent="Vérification…";
+    if(await Coffre.essayer(inp.value.trim())){inp.value="";maj();document.querySelectorAll(".partie iframe[src]").forEach(fr=>{fr.src=fr.src})}
+    else{etat.textContent="Code incorrect";inp.select()}});
+  etat.addEventListener("click",e=>{if(!f.classList.contains("ok"))return;e.stopPropagation();Coffre.oublier();maj();document.querySelectorAll(".partie iframe[src]").forEach(fr=>{fr.src=fr.src})});
+  f.addEventListener("click",e=>e.stopPropagation());f.addEventListener("keydown",e=>e.stopPropagation());
+  maj();
+})();
+</script>
+</body></html>

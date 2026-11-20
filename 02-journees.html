@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RASF 10 ans · Les Journées</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;600;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --nuit:#0B1F4D; --nuit2:#13295f; --or:#F2B41F; --or-clair:#f7d27a;
+  --papier:#FBF8F1; --encre:#1b2440; --gris:#6b7187; --trait:#e4dccb;
+  --conf:#0B1F4D; --atelier:#2e7d6b; --visite:#8a5a9e; --fourn:#c9861a; --asso:#b23b3b; --convi:#8b8f9c;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#050d24;font-family:"Source Sans 3",system-ui,sans-serif;color:var(--encre)}
+body{display:flex;align-items:center;justify-content:center;overflow:hidden}
+#stage{width:1600px;height:900px;position:absolute;left:50%;top:50%;transform-origin:center center;background:var(--papier);display:grid;grid-template-rows:84px 1fr 44px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+/* frise */
+.frise{background:var(--nuit);display:flex;align-items:center;padding:0 40px;gap:6px;position:relative}
+.frise .logo{font-family:"Playfair Display",serif;color:var(--or);font-size:30px;font-weight:700;letter-spacing:2px;margin-right:28px;white-space:nowrap}
+.frise .logo small{display:block;font-family:"Source Sans 3";font-size:12px;letter-spacing:3px;color:#c9d2ea;font-weight:600}
+#stage{grid-template-columns:minmax(0,1fr)}
+.frise{min-width:0;overflow:hidden}
+/* Sélecteur d'années : en haut du panneau bleu de gauche */
+.selecteur{position:absolute;top:100px;left:28px;width:344px;height:84px;display:flex;align-items:center;gap:6px;z-index:6}
+.selecteur .an{background:var(--nuit2);font-size:16px;padding:5px 11px}
+.cartouche{padding-top:132px!important}
+.selecteur .fenetre{align-items:flex-start;padding-top:10px}
+.fenetre{flex:1;min-width:0;overflow:hidden;align-self:stretch;display:flex;align-items:center;position:relative}
+.annees{display:flex;position:relative;transition:transform .6s cubic-bezier(.4,0,.2,1)}
+.annees::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:rgba(242,180,31,.35)}
+.annees .case{flex:none;display:flex;justify-content:center;position:relative}
+.chev{all:unset;flex:none;cursor:pointer;width:32px;height:32px;margin-top:-30px;border-radius:50%;display:grid;place-items:center;font:700 22px/1 "Source Sans 3";color:var(--or);border:2px solid rgba(242,180,31,.5);transition:.15s}
+.chev:hover{background:var(--or);color:var(--nuit)}
+.chev:disabled{opacity:.25;cursor:default;background:none;color:var(--or)}
+.frise .logo{margin-right:18px!important}
+.an{position:relative;z-index:1;background:var(--nuit);border:2px solid rgba(242,180,31,.5);color:#dfe5f5;font:600 17px "Source Sans 3";padding:6px 12px;border-radius:20px;cursor:pointer;transition:.15s}
+.an:hover{border-color:var(--or);color:#fff}
+.an.on{background:var(--or);color:var(--nuit);border-color:var(--or)}
+.an small{position:absolute;left:50%;top:calc(100% + 3px);transform:translateX(-50%);font:600 12px "Source Sans 3";color:#9fb0d8;white-space:nowrap;letter-spacing:.3px;pointer-events:none}
+.an.on small{color:var(--or)}
+.an.annule{text-decoration:line-through;opacity:.7}
+/* fiche */
+.fiche{display:grid;grid-template-columns:400px 1fr;min-height:0}
+.cartouche{background:var(--nuit2);color:#fff;padding:44px 40px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.cartouche::after{content:"";position:absolute;right:-70px;bottom:-70px;width:260px;height:260px;border:3px solid rgba(242,180,31,.25);clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0 50%)}
+.edition{color:var(--or);font-weight:700;letter-spacing:3px;text-transform:uppercase;font-size:15px}
+.annee{font-family:"Playfair Display",serif;font-size:132px;line-height:1;color:var(--or);margin:8px 0 6px}
+.ville{font-family:"Playfair Display",serif;font-size:44px;line-height:1.05}
+.lieu{font-size:20px;color:#c9d2ea;margin-top:10px;line-height:1.3}
+.dates{margin-top:22px;display:inline-block;align-self:flex-start;border:2px solid var(--or);color:var(--or);padding:6px 14px;border-radius:4px;font-weight:700;font-size:18px}
+.statut{margin-top:16px;font-size:15px;color:var(--or-clair);font-style:italic;line-height:1.35}
+.drole{margin-top:34px;position:relative;z-index:1;display:flex;flex-direction:column;gap:12px}
+/* Signature : « Anonyme » laisse place au vrai nom, en fondu, à l'entrée comme à la sortie du survol */
+.drole .sig{display:grid;justify-items:end;align-items:end;margin-top:8px;cursor:help;min-height:30px}
+.drole .sig>span{grid-area:1/1;transition:opacity .45s ease,transform .45s cubic-bezier(.2,.7,.2,1)}
+.drole .sig .anon{font-style:italic;font-weight:600;color:var(--gris)}
+.drole .sig .vrai{display:block;font:700 36px "Playfair Display",serif;color:var(--asso);line-height:1.1;opacity:0;transform:translateY(8px) scale(.92);transform-origin:right bottom;pointer-events:none}
+.drole .sig:hover .anon{opacity:0;transform:translateY(-6px)}
+.drole .sig:hover .vrai{opacity:1;transform:none}
+@keyframes demasque{from{opacity:0;transform:scale(.4) rotate(-6deg)}to{opacity:1;transform:none}}
+.drole p.confetti{cursor:pointer}
+.drole .lab{color:var(--fourn);font-weight:700;letter-spacing:3px;text-transform:uppercase;font-size:13px;animation:entre .6s ease both 2.1s}
+.drole p{background:rgba(242,180,31,.16);border-left:5px solid var(--or);padding:14px 18px;font-size:21px;line-height:1.35;color:var(--nuit);font-weight:600;border-radius:0 6px 6px 0;animation:entre .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(2.4s + var(--i)*400ms)}
+/* Ligne qui s'étire jusqu'en bas de la colonne (Restaurant 2021 : nuit blanche + médias) */
+.item.etire{flex:1;align-items:stretch;margin-bottom:0}
+.item.etire .corps{display:flex;flex-direction:column}
+.item.etire .h.plage i{flex:1;height:auto!important;transform-origin:top;animation:descend 2.8s cubic-bezier(.45,0,.2,1) 1s both}
+.item.etire .h.plage span:last-child{animation:entre .5s both 3.7s}
+.item.etire.media .h.plage i{flex:none;height:34px!important;animation:none}
+.item.etire.media .h.plage span:last-child{animation:none}
+@keyframes descend{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+/* La zone jaune descend en même temps que le trait (fond porté par un pseudo-élément, pour ne pas rogner le zoom des photos) */
+.item.fete.etire{position:relative;background:none;box-shadow:none}
+.item.fete.etire::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:8px;background:rgba(242,180,31,var(--a,.15));animation:zone 2.8s cubic-bezier(.45,0,.2,1) 1s both}
+@keyframes zone{from{clip-path:inset(0 0 calc(100% - 92px) 0 round 8px)}to{clip-path:inset(0 0 0 0 round 8px)}}
+.item.etire .pola{animation-delay:calc(2s + var(--i)*300ms)}
+/* Photos de soirée façon polaroïd, dans la zone jaune */
+.polas{position:relative;flex:1;min-height:200px;margin-top:10px}
+.pola{position:absolute;width:120px;background:#fff;padding:6px 6px 20px;box-shadow:0 8px 18px rgba(11,31,77,.35);border-radius:2px;transform:rotate(var(--r));animation:tombe .7s cubic-bezier(.2,.9,.3,1.2) backwards;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s;transform-origin:center bottom;cursor:zoom-in;animation-delay:calc(1.2s + var(--i)*350ms)}
+.pola img{display:block;width:100%;height:120px;object-fit:cover;background:#222}
+.pola span{position:absolute;left:0;right:0;bottom:2px;text-align:center;font:600 11px "Source Sans 3";color:#555;letter-spacing:.5px}
+.pola.son button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;height:120px;border:0;background:var(--nuit);color:var(--or);font:700 15px "Source Sans 3";cursor:pointer}
+.pola.son button b{font-size:38px;line-height:1}
+.pola.son.joue button b{animation:zoomfete .8s ease-in-out infinite}
+/* Survol : la photo se redresse et s'agrandit */
+.pola:hover{transform:rotate(0) scale(2.3);z-index:20;box-shadow:0 24px 60px rgba(11,31,77,.55)}
+.pola.son:hover{cursor:pointer}
+.pola span.fort{font:700 15px "Playfair Display",serif;color:var(--nuit);letter-spacing:3px;bottom:1px}
+@keyframes tombe{from{opacity:0;transform:translateY(-60px) rotate(calc(var(--r) - 25deg)) scale(1.3)}to{opacity:1;transform:rotate(var(--r))}}
+.cartouche .source{margin-top:auto;font-size:12.5px;color:#8f9ac0;line-height:1.35;position:relative;z-index:1}
+.jours{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:30px 36px 20px;min-height:0}
+.jours.large{grid-template-columns:1.5fr 1fr}
+.jour{padding:0 22px;min-height:0;min-width:0;display:flex;flex-direction:column}
+.jour+.jour{border-left:1px solid var(--trait)}
+.jour h3{font-family:"Playfair Display",serif;font-size:28px;color:var(--nuit);display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.jour h3 span{font:600 15px "Source Sans 3";color:var(--gris);letter-spacing:1px;text-transform:uppercase}
+.item{display:grid;grid-template-columns:74px 12px 1fr;gap:10px;padding:7px 0;border-bottom:1px dashed var(--trait);align-items:start}
+.item:last-child{border-bottom:0}
+.item.fete{background:rgba(242,180,31,var(--a,.15));border-bottom:0;margin:3px -10px;padding:8px 10px;border-radius:8px;box-shadow:0 2px 0 rgba(201,134,26,calc(var(--a,.15)*.6))}
+.item.fete .h{color:var(--nuit)}
+/* Plage horaire « début | trait vertical | fin » (restaurant qui s'éternise) */
+.h.plage{display:flex;flex-direction:column;align-items:flex-start;line-height:1.1}
+.h.plage i{display:block;width:2px;background:currentColor;margin:4px 0 4px 10px;border-radius:2px}
+.h.plage span:last-child{white-space:normal}
+.h.plage span.flou{filter:blur(2.6px)}
+.item.fete .pt{background:var(--nuit)!important;margin-top:calc(var(--fs,16.5px)*.525 - 5px)}
+.item.fete .q{color:#5a4a1e;margin-top:5px}
+.item.fete .t{font-family:"Playfair Display",serif;line-height:1.05;color:var(--nuit)}
+/* Lyon 2019 : Apéro et Restaurant zooment en boucle */
+@keyframes zoomfete{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+.item.fete.zoom .t{display:inline-block;transform-origin:left center;animation:zoomfete 1.6s ease-in-out infinite}
+.item.fete.zoom+.item.fete.zoom .t{animation-delay:.8s}
+.h{font-weight:700;color:var(--fourn);font-size:15px;padding-top:2px;font-variant-numeric:tabular-nums}
+.pt{width:10px;height:10px;border-radius:50%;margin-top:7px}
+.t{font-size:16.5px;line-height:1.25;font-weight:600}
+.q{font-size:14px;color:var(--gris);line-height:1.25;margin-top:2px}
+.vide{margin:auto;text-align:center;max-width:820px;padding:40px}
+.vide blockquote{font-family:"Playfair Display",serif;font-size:30px;line-height:1.35;color:var(--nuit)}
+.vide .chiffres{display:flex;justify-content:center;gap:56px;margin:36px 0 26px}
+.vide .chiffres b{display:block;font-family:"Playfair Display",serif;font-size:72px;color:var(--or);line-height:1.1;margin-bottom:14px;font-variant-numeric:lining-nums}
+.vide .chiffres span{font-size:16px;color:var(--gris);text-transform:uppercase;letter-spacing:1px}
+.vide p{font-size:17px;color:var(--gris);line-height:1.45}
+/* 2020 : la visio de l'époque (« tu me vois ? tu m'entends ? ») */
+.visio{flex:1;display:flex;flex-direction:column;align-items:center;padding:6px 20px 0}
+.visio .titre{font:700 34px "Playfair Display",serif;color:var(--nuit);text-decoration:line-through;text-decoration-color:var(--asso);text-decoration-thickness:3px}
+.visio .sous{font-size:18px;color:var(--gris);margin:4px 0 18px}
+.ecranv{background:#1f2430;border-radius:14px;padding:14px;box-shadow:0 16px 40px rgba(11,31,77,.35);width:1060px}
+.mos{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.tuile{position:relative;height:200px;border-radius:10px;overflow:hidden;background:linear-gradient(160deg,var(--c1),var(--c2));display:flex;align-items:flex-end;justify-content:center;outline:3px solid transparent;transition:outline-color .2s}
+.tuile .perso{position:relative;width:120px;height:150px}
+.tuile .perso::before{content:"";position:absolute;left:34px;top:18px;width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.85)}
+.tuile .perso::after{content:"";position:absolute;left:10px;top:78px;width:100px;height:90px;border-radius:50px 50px 0 0;background:rgba(255,255,255,.85)}
+.tuile .nom{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.55);color:#fff;font-size:13px;padding:3px 8px;border-radius:5px;display:flex;gap:6px;align-items:center}
+.tuile .mute{color:#ff5b5b;font-weight:700}
+.tuile.parle{outline-color:#3ddc84}
+.tuile.noire{background:#2a2f3c;align-items:center}
+.tuile.noire .ini{width:84px;height:84px;border-radius:50%;background:var(--c1);color:#fff;font:700 34px "Source Sans 3";display:flex;align-items:center;justify-content:center}
+.tuile.fige .perso{filter:blur(5px) saturate(.4);transform:translateX(18px) skewX(-8deg)}
+.tuile .bandeau{position:absolute;top:0;left:0;right:0;background:rgba(0,0,0,.6);color:#ffd166;font-size:13px;padding:5px 10px;text-align:center}
+.tuile.recon{background:#2a2f3c;align-items:center;flex-direction:column;justify-content:center;color:#c9d2ea;font-size:15px;gap:10px}
+.tuile.recon i{width:34px;height:34px;border-radius:50%;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;animation:tourne 1s linear infinite}
+.tuile.couche{align-items:center}.tuile.couche .perso{transform:rotate(-90deg)}
+@keyframes tourne{to{transform:rotate(360deg)}}
+.bulle{position:absolute;left:50%;top:8px;transform:translateX(-50%);background:#fff;color:var(--nuit);font:700 19px "Source Sans 3";padding:8px 14px;border-radius:14px;white-space:nowrap;box-shadow:0 6px 16px rgba(0,0,0,.35);animation:bulle 2.4s ease both;z-index:2}
+.bulle::after{content:"";position:absolute;left:50%;bottom:-8px;margin-left:-8px;border:8px solid transparent;border-bottom:0;border-top-color:#fff}
+@keyframes bulle{0%{opacity:0;transform:translateX(-50%) scale(.5)}10%{opacity:1;transform:translateX(-50%) scale(1.08)}16%{transform:translateX(-50%) scale(1)}85%{opacity:1}100%{opacity:0}}
+.barrev{display:flex;justify-content:center;gap:14px;margin-top:14px}
+.barrev span{width:46px;height:46px;border-radius:50%;background:#3a4050;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;position:relative}
+.barrev span.off{background:#e5484d}
+.barrev span.quit{width:auto;padding:0 20px;border-radius:23px;background:#e5484d;font:700 15px "Source Sans 3"}
+.visio .note{margin-top:16px;font-size:17px;color:var(--gris)}
+/* 2017 : cercle dessiné à la main autour de la soirée = thématique récurrente */
+.jour{position:relative}
+.cercle{position:absolute;pointer-events:none;overflow:visible;z-index:3}
+.cercle rect{fill:none;stroke:#e0703f;stroke-width:5;stroke-linecap:round;stroke-dasharray:1.15 1.15;stroke-dashoffset:1.15;animation:trace 1.3s cubic-bezier(.5,0,.3,1) 1.6s forwards}
+@keyframes trace{to{stroke-dashoffset:0}}
+.recurrent{position:absolute;font:700 34px "Caveat",cursive;color:#e0703f;transform:rotate(-4deg);white-space:nowrap;z-index:3;pointer-events:none;animation:entre .6s both 2.9s}
+.recurrent .rec-liste{display:block;margin:4px 0 0 18px;font-size:27px;line-height:1.15}
+.recurrent .rec-liste span{display:block}
+.recurrent .rec-liste span::before{content:"– "}
+html.apercu .cercle rect{stroke-dashoffset:0}
+/* 2018 : pastis (effet ouzo), animation discrète */
+.scene{flex:1;display:flex;align-items:center;justify-content:center;gap:20px;padding-top:6px;min-height:0}
+.pastis{margin:0;text-align:center}
+.pastis figcaption{font:700 22px "Caveat",cursive;color:#7a4f0c;line-height:1.05;margin-top:2px}
+.pastis .liquide{fill:#d9a21c;animation:remplir-pastis 2.8s cubic-bezier(.45,0,.2,1) 1s both,louche 7s ease-in-out 4.2s infinite}
+@keyframes remplir-pastis{from{transform:translateY(84px)}to{transform:translateY(0)}}
+.pastis .eau{fill:#cfe8f3;opacity:0;animation:verse 7s ease-in-out 4.2s infinite}
+.pastis .goutte{fill:#8fc3dc;opacity:0;animation:goutte 7s ease-in 4.2s infinite}
+.pastis .g2{animation-delay:4.45s}.pastis .g3{animation-delay:4.7s}
+@keyframes goutte{0%{opacity:0;transform:translateY(0)}4%{opacity:1}22%{opacity:1;transform:translateY(80px)}26%,100%{opacity:0;transform:translateY(80px)}}
+@keyframes verse{0%,15%{opacity:0}25%,55%{opacity:.9}70%,100%{opacity:0}}
+@keyframes louche{0%,20%{fill:#d9a21c}45%,85%{fill:#f2e3a6}100%{fill:#d9a21c}}
+/* 2021 : la nuit blanche n'en finit pas — le trait s'allonge et la page défile vers le bas */
+.jours.defile{overflow:hidden}
+.h.plage{position:relative}
+.h.plage em.marque{position:absolute;left:18px;font:700 15px "Source Sans 3";font-style:normal;color:var(--nuit);white-space:nowrap}
+/* Carte de France dans le cartouche : point de la ville de l'édition */
+.carte-fr{margin-top:22px;position:relative;z-index:1}
+.carte-fr .pays{fill:rgba(255,255,255,.07);stroke:rgba(242,180,31,.55);stroke-width:1.5;stroke-linejoin:round}
+.carte-fr .seg{fill:none;stroke:rgba(242,180,31,.45);stroke-width:1.6;stroke-dasharray:1 1;stroke-dashoffset:1;animation:trace .45s linear forwards;animation-delay:calc(.5s + var(--k)*.4s)}
+.carte-fr .seg.dernier{stroke:var(--or);stroke-width:2.6;filter:drop-shadow(0 0 3px rgba(242,180,31,.8))}
+html.apercu .carte-fr .seg{stroke-dashoffset:0}
+.carte-fr .autre{fill:rgba(242,180,31,.35)}
+.carte-fr .ici{fill:var(--or)}
+.carte-fr .onde{fill:none;stroke:var(--or);stroke-width:2;transform-box:fill-box;transform-origin:center;animation:onde 1.8s ease-out .8s infinite}
+@keyframes onde{from{transform:scale(1);opacity:.9}to{transform:scale(4);opacity:0}}
+.carte-fr{overflow:visible}
+.carte-fr .ancienne{fill:#c9d2ea;opacity:.75;font:600 12px "Source Sans 3";animation:entre .6s both .6s}
+.carte-fr .nom{fill:#fff;font:700 17px "Source Sans 3"}
+.carte-fr .lyc{fill:#c9d2ea;font:600 13px "Source Sans 3"}
+/* Book des Journées : pages en vignettes, agrandies au survol */
+.book{margin-top:30px}
+.book .lab{color:var(--fourn);font-weight:700;letter-spacing:3px;text-transform:uppercase;font-size:13px;margin-bottom:12px}
+.book .pages{display:flex;gap:14px}
+.book img{width:92px;height:122px;object-fit:cover;border-radius:4px;box-shadow:0 8px 18px rgba(11,31,77,.3);transform-origin:center bottom;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s;cursor:zoom-in;position:relative;animation:entre .6s backwards;animation-delay:calc(1s + var(--i)*200ms)}
+.book img:last-child{transform-origin:right bottom}
+.book img:first-child{transform-origin:left bottom}
+.book img:hover{transform:scale(3.4);z-index:20;box-shadow:0 30px 70px rgba(11,31,77,.6)}
+/* 2025 : les jeunes arrivent à 11h après leur nuit à La Chapelle — carte néon */
+.item.jeunes{grid-template-columns:74px 12px 1fr 100px;background:#120a2e;border-radius:10px;margin:4px -10px;padding:10px;border-bottom:0;border:3px solid #ff6fcf;box-shadow:0 0 6px #ff3fb4,0 0 16px #ff3fb4,0 0 36px rgba(255,63,180,.75),0 0 70px rgba(255,63,180,.35),inset 0 0 12px rgba(255,63,180,.55);animation:entre .5s cubic-bezier(.2,.7,.2,1) both,neonbord 4s infinite 1.2s;animation-delay:calc(.35s + var(--i)*70ms),1.2s}
+@keyframes neonbord{0%,100%{border-color:#ff6fcf;box-shadow:0 0 6px #ff3fb4,0 0 16px #ff3fb4,0 0 36px rgba(255,63,180,.75),0 0 70px rgba(255,63,180,.35),inset 0 0 12px rgba(255,63,180,.55)}
+ 50%{border-color:#ff9be0;box-shadow:0 0 8px #ff3fb4,0 0 24px #ff3fb4,0 0 52px rgba(255,63,180,.9),0 0 96px rgba(255,63,180,.5),inset 0 0 18px rgba(255,63,180,.7)}
+ 70%,74%{border-color:#7a2a5c;box-shadow:0 0 2px rgba(255,63,180,.3),inset 0 0 4px rgba(255,63,180,.2)}72%,76%{border-color:#ff6fcf}}
+.item.jeunes .h{color:#ff7fd0}
+.item.jeunes .t{color:#fff;font:700 24px "Playfair Display",serif;text-shadow:0 0 8px #ff3fb4,0 0 18px #ff3fb4;animation:neon 3.2s infinite 1.5s}
+.item.jeunes .q{color:#d9c8ff;font-size:14.5px;margin-top:4px}
+@keyframes neon{0%,18%,22%,62%,64%,100%{opacity:1}20%,63%{opacity:.35}}
+.vitrail{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:#ff7fd0;font:700 11px "Source Sans 3"}
+.vitrail .faisceau{transform-origin:45px 60px;animation:balaye 2.6s ease-in-out infinite alternate}
+@keyframes balaye{from{transform:rotate(-35deg)}to{transform:rotate(35deg)}}
+/* Paris 2024 : la soirée vire au lever du jour (dégradé jaune → nuit → aube, soleil qui se lève) */
+.item.fete.aube{position:relative;overflow:hidden;background:linear-gradient(180deg,rgba(242,180,31,var(--a)) 0%,rgba(242,180,31,var(--a)) 45%,#f6b043 72%,#f39a5b 90%,#ffcf7a 100%)}
+.item.fete.aube>*{position:relative;z-index:1}
+.item.fete.aube::after{content:"";position:absolute;right:70px;bottom:-34px;width:78px;height:78px;border-radius:50%;background:radial-gradient(circle,#fff8d6 0%,#ffd75a 45%,#ff9d3d 68%,rgba(255,157,61,0) 72%);box-shadow:0 0 40px 12px rgba(255,190,90,.55);animation:leve 3.5s cubic-bezier(.2,.7,.2,1) 1.2s both}
+@keyframes leve{from{transform:translateY(46px);opacity:.3}to{transform:translateY(0);opacity:1}}
+/* 2019 : la charcuterie lyonnaise arrive pendant que le trait descend, puis se balance doucement */
+.scene.lyon{gap:26px;justify-content:center}
+.mets{margin:0;text-align:center;animation:mets-arrive .7s cubic-bezier(.2,.9,.3,1.3) both,mets-balance 3s ease-in-out infinite;animation-delay:calc(1.4s + var(--k)*.9s),calc(4.2s + var(--k)*.5s)}
+.mets svg{width:100%;max-width:150px;height:auto}
+.scene.lyon{min-width:0;max-width:100%}
+.scene.lyon .mets{flex:1 1 0;min-width:0}
+.mets figcaption{white-space:nowrap}
+.mets figcaption{font:700 22px "Caveat",cursive;color:#7a1530;margin-top:4px}
+@keyframes mets-arrive{from{opacity:0;transform:translateY(-50px) rotate(-12deg) scale(.6)}to{opacity:1;transform:none}}
+@keyframes mets-balance{0%,100%{transform:rotate(0)}50%{transform:rotate(-4deg) translateY(-3px)}}
+/* 2016 : grille de rotation animée */
+.rotation{position:relative;margin-top:14px}
+.rotation .sms{position:absolute;right:0;top:-6px;display:flex;align-items:center;gap:6px;background:var(--nuit);color:#fff;font:700 13px "Source Sans 3";padding:5px 10px;border-radius:14px;opacity:0}
+.rotation .sms.ping{animation:ping 1.5s ease both}
+@keyframes ping{0%{opacity:0;transform:translateY(6px) scale(.8)}12%,70%{opacity:1;transform:none}100%{opacity:0}}
+.grille{display:grid;grid-template-columns:34px repeat(var(--n),1fr);gap:2px;margin-top:26px;font-size:10.5px}
+.grille b{font:700 11px "Source Sans 3";color:var(--fourn);text-align:center;padding:2px 0;border-radius:4px;transition:.3s}
+.grille b.actif{background:var(--or);color:var(--nuit)}
+.grille i{font:700 10.5px "Source Sans 3";font-style:normal;color:var(--gris);align-self:center}
+.grille span{height:19px;line-height:19px;text-align:center;white-space:nowrap;overflow:hidden;border-radius:3px;background:hsl(var(--h,0),45%,88%);color:hsl(var(--h,0),45%,25%);font-weight:600;transition:transform .3s,box-shadow .3s,opacity .3s;opacity:.55}
+.grille span.hall{background:rgba(242,180,31,.35);color:#7a4f0c}
+.grille span.libre{background:transparent;border:1px dashed var(--trait);color:var(--gris);font-style:italic}
+.grille span.actif{opacity:1;transform:scale(1.08);box-shadow:0 2px 6px rgba(11,31,77,.25);z-index:1}
+/* 2016 : coupe du lycée et bandeau des sociétés */
+.batiment{margin-top:14px}
+.batiment .lab,.bandeau .lab{color:var(--fourn);font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:12px;margin-bottom:6px}
+.coupe{position:relative;border:2px solid var(--nuit);border-radius:6px 6px 0 0;padding:6px 6px 0;background:#fff;display:flex;flex-direction:column;gap:4px}
+.coupe .niv{display:flex;gap:5px;align-items:stretch;height:84px;border-bottom:1px dashed var(--trait)}
+.coupe .niv:last-of-type{border-bottom:0;height:112px}
+.coupe em{width:56px;flex:none;font:700 13px "Source Sans 3";font-style:normal;color:var(--gris);align-self:center}
+.coupe .salle{flex:1;min-width:0;border-radius:5px;background:#eef1f8;font:600 12px "Source Sans 3";color:var(--gris);padding:3px 5px}
+.coupe .salle.hall{flex:1;background:rgba(242,180,31,.25);color:#7a4f0c;font-size:13px}
+.batiment{position:relative}
+.batiment .heure{float:right;font:700 14px "Source Sans 3";color:var(--nuit);background:var(--or);border-radius:10px;padding:1px 10px;letter-spacing:0}
+.batiment .sms{position:absolute;right:0;top:-30px;display:flex;align-items:center;gap:6px;background:var(--nuit);color:#fff;font:700 13px "Source Sans 3";padding:5px 10px;border-radius:14px;opacity:0;z-index:3}
+.batiment .sms.ping{animation:ping 2.6s ease both}
+.coupe .eq{position:absolute;left:0;top:0;width:44px;height:22px;border-radius:11px;background:#2e8b8b;color:#fff;font:700 11px/22px "Source Sans 3";font-style:normal;text-align:center;transition:left 1.6s cubic-bezier(.4,0,.2,1),top 1.6s cubic-bezier(.4,0,.2,1),opacity .4s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.coupe .eq.paire{background:#8a5a9e}
+.coupe .eq.libre{opacity:.45}
+.bandeau{margin-top:12px;min-width:0;max-width:100%}
+.bandeau .defil{overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.bandeau .piste{display:flex;gap:10px;width:max-content;animation:defile 40s linear infinite}
+.bandeau .piste span{font:600 14px "Source Sans 3";color:var(--nuit);background:#fff;border:1px solid var(--trait);border-radius:14px;padding:3px 10px;white-space:nowrap}
+@keyframes defile{to{transform:translateX(-50%)}}
+/* 2016 : chiffres de la journée fondatrice */
+.trajets{margin-top:30px;background:var(--nuit);color:#fff;border-radius:12px;padding:20px 24px;animation:entre .6s both;animation-delay:1.4s}
+.trajets .lab{color:var(--or)!important;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:12px;margin-bottom:10px}
+.trajets .tr-corps{display:flex;align-items:center;gap:16px}
+.trajets .tr-corps b{font:700 64px/1 "Playfair Display",serif;color:var(--or)}
+.trajets .tr-corps span{font-size:18px;line-height:1.3;color:#dfe5f5}
+.trajets p{margin-top:12px;font-size:17px;line-height:1.4;color:#dfe5f5}
+.trajets p strong{color:var(--or)}
+.trajets small{display:block;margin-top:10px;font-size:13px;color:#9fb0d8;letter-spacing:.5px}
+.mini-chiffres{display:grid;grid-template-columns:repeat(2,1fr);grid-auto-rows:1fr;gap:14px;margin-top:22px;flex:1;min-height:0;margin-bottom:56px}
+.mini-chiffres div{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;border:1px solid var(--trait);border-radius:12px;padding:10px}
+.mini-chiffres div{text-align:center;animation:entre .6s both;animation-delay:calc(1s + var(--i)*150ms)}
+.mini-chiffres b{display:block;font:700 76px "Playfair Display",serif;color:var(--or);line-height:1;font-variant-numeric:lining-nums}
+.mini-chiffres span{font-size:15px;color:var(--gris);text-transform:uppercase;letter-spacing:1.5px;margin-top:8px;line-height:1.3;text-align:center}
+/* légende */
+.frise{grid-row:1;grid-column:1}.fiche{grid-row:2/4;grid-column:1}
+/* Le panneau de gauche descend jusqu'en bas ; le contenu de droite s'arrête au-dessus de la barre des années */
+.fiche>*:not(.cartouche){margin-bottom:44px;min-height:0}
+/* Panneau clair avec ombre portée : fond papier chaud, texte bleu nuit, or foncé lisible sur clair */
+.cartouche,.selecteur{--or:#B4802A}
+.cartouche{background:#fffdf8!important;color:var(--nuit)!important;box-shadow:8px 0 30px rgba(11,31,77,.18);z-index:3}
+.cartouche::after{border-color:rgba(180,128,42,.22)!important}
+.cartouche .ville{color:var(--nuit)}
+.cartouche .lieu{color:#4a5577}
+.cartouche .statut{color:#8a6420}
+.cartouche .source{color:#6b7594!important}
+.cartouche .carte-fr .pays{fill:rgba(11,31,77,.07);stroke:rgba(180,128,42,.6)}
+.cartouche .carte-fr .seg{stroke:rgba(140,96,28,.8);stroke-width:2}
+.cartouche .carte-fr .seg.dernier{stroke:var(--or);filter:drop-shadow(0 0 3px rgba(180,128,42,.5))}
+.cartouche .carte-fr .autre{fill:rgba(180,128,42,.4)}
+.cartouche .carte-fr .nom{fill:var(--nuit)}
+.cartouche .carte-fr .lyc,.cartouche .carte-fr .ancienne{fill:#4a5577}
+.selecteur .an{background:#fffdf8;color:var(--nuit);border-color:rgba(180,128,42,.5)}
+.selecteur .an:hover{border-color:var(--or);color:var(--nuit)}
+.selecteur .an.on{background:var(--or);color:#fff;border-color:var(--or)}
+.selecteur .an small{color:#6b7594}.selecteur .an.on small{color:var(--or)}
+.selecteur .annees::before{background:rgba(180,128,42,.35)}
+.selecteur .chev{color:var(--or);border-color:rgba(180,128,42,.5)}
+.selecteur .chev:hover{background:var(--or);color:#fff}
+.selecteur{z-index:7}
+.molette-aide{position:absolute;right:18px;bottom:14px;font:600 14px "Source Sans 3";color:var(--nuit);background:#fff;border-radius:14px;padding:4px 12px;box-shadow:0 2px 8px rgba(11,31,77,.15);transition:opacity .4s;animation:molette 1.8s ease-in-out infinite;pointer-events:none}
+.molette-aide b{color:var(--fourn)}
+@keyframes molette{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+.item.a-champ{position:relative;overflow:visible}
+.champ{position:absolute;right:10px;top:50%;width:150px;height:106px;margin-top:-58px;pointer-events:none;overflow:visible}
+.champ .verre{fill:none;stroke:var(--nuit);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.champ .vin{fill:#d9961c;transform-box:fill-box;transform-origin:bottom;transform:scaleY(0);animation:champ-rempli 1.4s cubic-bezier(.3,.6,.3,1) 1.4s forwards}
+.champ .bul{fill:#fff;opacity:0;animation:champ-bulle 1.6s ease-in infinite;animation-delay:calc(2.6s + var(--k)*.32s)}
+.champ .flute{animation:champ-g 3.2s cubic-bezier(.4,0,.2,1) 3s infinite}
+.champ .f2{animation-name:champ-d}
+.champ .etincelle{fill:var(--or);opacity:0;transform-origin:80px 16px;animation:champ-tinte 3.2s ease 3s infinite}
+@keyframes champ-rempli{to{transform:scaleY(.78)}}
+@keyframes champ-bulle{0%{opacity:0;transform:translateY(0)}15%{opacity:.95}100%{opacity:0;transform:translateY(-44px)}}
+@keyframes champ-g{0%,60%,100%{transform:rotate(0)}22%,32%{transform:rotate(14deg)}}
+@keyframes champ-d{0%,60%,100%{transform:rotate(0)}22%,32%{transform:rotate(-14deg)}}
+@keyframes champ-tinte{0%,20%{opacity:0;transform:scale(.4)}26%{opacity:1;transform:scale(1.15)}40%{opacity:0;transform:scale(1.4)}100%{opacity:0}}
+html.apercu .champ *{animation:none!important}html.apercu .champ .vin{transform:scaleY(.78)}
+.legende.nav-ans{grid-row:3;grid-column:1;margin-left:400px;position:relative;z-index:2;background:var(--papier);justify-content:space-between;padding:0 40px}
+.nav-ans button{all:unset;cursor:pointer;display:inline-flex;align-items:baseline;gap:8px;line-height:1;font:400 13px "Source Sans 3";letter-spacing:2px;text-transform:uppercase;color:#c9d2ea;background:var(--nuit);border:1px solid var(--nuit);border-radius:20px;padding:7px 16px 6px;transition:background .25s ease,color .25s ease,border-color .25s ease,transform .25s ease}
+.nav-ans button b{font:600 16px "Playfair Display",serif;letter-spacing:0;text-transform:none;color:#fff;margin:0;transition:color .25s ease}
+.nav-ans button:hover{background:#fff;color:var(--nuit);border-color:var(--nuit);transform:translateY(-1px)}
+.nav-ans button:hover b{color:var(--nuit)}
+.nav-ans button[hidden]{display:none}
+.nav-ans .vide{flex:1}
+.legende{display:flex;align-items:center;gap:26px;padding:0 40px;border-top:1px solid var(--trait);font-size:14px;color:var(--gris)}
+.legende i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;vertical-align:-1px}
+.legende .nav{margin-left:auto;font-size:13px}
+@keyframes entre{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes entreG{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:none}}
+@keyframes grandit{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
+.cartouche>*{animation:entreG .7s cubic-bezier(.2,.7,.2,1) both}
+.cartouche>:nth-child(2){animation:grandit .8s cubic-bezier(.2,.7,.2,1) .1s both}
+.cartouche>:nth-child(3){animation-delay:.25s}.cartouche>:nth-child(4){animation-delay:.35s}.cartouche>:nth-child(5){animation-delay:.45s}
+.jour h3{animation:entre .5s both .2s}
+.item{animation:entre .5s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(.35s + var(--i)*70ms)}
+.vide>*{animation:entre .7s both}.vide>:nth-child(2){animation-delay:.3s}.vide>:nth-child(3){animation-delay:.6s}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<script>if(new URLSearchParams(location.search).has('apercu'))document.documentElement.classList.add('apercu')</script>
+<style>html.apercu *{animation:none!important}</style>
+<div id="stage">
+  <div class="frise">
+    <div class="logo">RASF<small>10 ANS DE JOURNÉES</small></div>
+  </div>
+  <div class="fiche" id="fiche"></div>
+  <div class="selecteur">
+    <button class="chev" id="chevG" type="button" aria-label="Années précédentes">‹</button>
+    <div class="fenetre" id="fenetre"><div class="annees" id="annees"></div></div>
+    <button class="chev" id="chevD" type="button" aria-label="Années suivantes">›</button>
+  </div>
+  <div class="legende nav-ans"><button id="anPrec" type="button"></button><span class="vide"></span><button id="anSuiv" type="button"></button></div>
+</div>
+<script src="coffre.js"></script>
+<script>
+const C={c:"conf",a:"atelier",v:"visite",f:"fourn",s:"asso",r:"convi",x:"convi",j:"mauve"};
+/* Soirée (type "x") : la taille grandit d'année en année, effet comique voulu */
+const fete=an=>16.5+4.5*Math.max(0,an-2017);
+/* Fond doré : très transparent en 2017, de plus en plus opaque jusqu'en 2026 */
+const feteA=an=>Math.min(1,.12+.88*Math.max(0,an-2017)/9).toFixed(2);
+const E=[
+{an:2016,ed:"Journée fondatrice",ville:"Paris",lieu:"ENCPB – Lycée Pierre-Gilles de Gennes",dates:"Lundi 9 mai 2016",
+ jours:["Lundi 9 mai","Mardi 10 mai"],
+ v:[["7h30","Accueil des fournisseurs","26 sociétés et l'AFTPVA inscrites","f"],["8h30","Accueil des participants, café","","r"],["9h","Le grand chassé-croisé : 16 équipes, 14 ateliers et le hall des stands","pauses à 10h30 et 15h30 · déjeuner au self à 12h30 · fin à 17h30","a"]],
+ rotation:true,
+ s:[["8h – 13h","L'« AG de RASF » à l'amphi de l'ENCPB, à la place du PNF annulé, organisée par Xavier Bataille","plans d'expériences, QHSSE · projet · RAP et formulation · synthèse · CDL · CCF","s"]],
+ chiffres:[["84","inscrits"],["31","établissements"],["26","sociétés"],["14","ateliers tournants de 9h à 17h30"]],
+ societes:["Ametek-Atlas","Anton Paar","Brant Industrie","BYK-Gardner","CEM µWaves","Datacolor","Elcometer","Erichsen","ES France","Konica Minolta","Krüss","Labomat","Labo Moderne","Lamy Rheology","MAC Technologie","Malvern","Metrohm","Monaderm","MTS Systems","PerkinElmer","Proxes","Shimadzu","Thermo Fisher","VMI","VWR","X-Rite","AFTPVA"],
+ trajets:true,drole:[{t:"« C'est dingue, j'ai même reçu un SMS à chaque fois que je devais changer d'atelier ! »",anon:"Anonyme",vrai:"Eric Winckler, Calais"}],
+ src:"rasf.fr/journees-rasf ; dossier Drive du 9 mai 2016 (pré-programme, inscriptions) ; mails de 2016"},
+{an:2017,ed:"2es Journées",ville:"Angers",lieu:"ETSCO",dates:"24 – 25 novembre 2017",cercle:true,
+ drole:[{t:"Vague souvenir : un atelier de pénétrométrie… sur des oursons. C'était le tout début, peut-être même pas aux Journées, mais rendu possible par l'association.",anon:"Anonyme",vrai:"Chloé Rémaud, Nantes"}],
+ v:[["ap.-midi","Visite d'entreprise","","v"],["soir","Apéro","discussion sur le projet, avec P. Goutverg, B. Manuel","x"],["20h30|minuit|18","Restaurant","","x"]],
+ s:[["9h30","Accueil, café","","r"],["10h","Conférence plénière","T. Benvegnu, Surfact'Green","c"],["11h","Stands fournisseurs","","f"],["12h","Déjeuner","","r"],["13h","Atelier CCF4","J.-L. Dormieux, E. Amadei, J. Pouard, P. Agulhon","a"],["14h30","Stands fournisseurs","","f"],["15h30","Atelier E4","E. Ramel, N. Pierquet, V. Antzoulatos","a"],["17h","Débats et conclusion","","s"]],
+ src:"rasf.fr/journees-rasf"},
+{an:2018,ed:"3es Journées",ville:"Marseille",lieu:"Lycée Jean Perrin",dates:"23 – 24 novembre 2018",scene:"marseille",
+ v:[["14h30","L'écocatalyse","Claude Grison","c"],["15h45","Analyse & métrologie","Jérôme Randon","c"],["","Pause avec les équipementiers","","f"],["17h","Cosmétique","Philippe Picerrelle","c"],["17h30","Ateliers Minitab · Analyse sensorielle","C. Roussel · M. Barbé","a"],["soir","Apéro & Pétanque","bilan des évaluations (projets, stages), avec P. Goutverg","x"],["20h30|2h du mat|34","Restaurant","","x","etire"]],
+ s:[["9h","Accueil, café","","r"],["9h30","Retours d'expériences des CCF4","J.-L. Dormieux","s"],["11h","Ateliers Analyse sensorielle · Usages du numérique","M. Barbé · M.-O. Reula","a"],["12h30","Apéro-repas avec les équipementiers","","f"],["14h","« Bornage » des capacités : analyse, synthèse, formulation","X. Bataille · E. Amadéi, C. Roussel · C. Debaig, M.-O. Reula, B. Manuel","a"]],
+ src:"rasf.fr/journees-rasf"},
+{an:2019,ed:"4es Journées",ville:"Lyon",lieu:"Lycée La Martinière-Diderot, site Augustins",dates:"29 – 30 novembre 2019",
+ v:[["14h","Visite Solvay : laboratoire d'analyse, atelier vanilline","","v"],["17h45","Présentations des fournisseurs","","f"],["18h15","Encres industrielles : application, formulation, réglementation","R. Gloriès, Zeller+Gmelin","c"],["19h","Résultats du test statistique national","","s"],["19h30","Apéro","« verre de l'amitié »","r"],["20h30|2h du mat|34","Restaurant","lyonnais","r"]],
+ s:[["8h30","Accueil, café","","r"],["9h","Polymères verts : réalité vs utopie","T. Hamaide, IMP Lyon","c"],["9h45","Stands fournisseurs","","f"],["10h15","Table ronde : poursuites d'études et recrutement","","c"],["11h45","Remise des prix « Mon projet en 180 s »","","s"],["12h","Vie de l'association, nouveau drive","","s"],["14h","Ateliers : bornage, CCF4, rhéologie, ESLV, compétence CCF","","a"],["16h","Utilisation de Minitab","P. Triboulet","a"],["17h","Clôture","","s"]],
+ src:"rasf.fr/journees-rasf"},
+{an:2020,ed:"5es Journées",ville:"Valenciennes",lieu:"Lycée de l'Escaut",dates:"20 – 21 novembre 2020",annule:true,visio:true,
+ vide:{citation:"Journées annulées.",chiffres:[],note:"Le programme prévu est repris presque à l'identique en novembre 2021, au lycée de l'Escaut."},
+ src:"rasf.fr/journees-rasf"},
+{an:2021,ed:"5es Journées",ville:"Valenciennes",lieu:"Lycée de l'Escaut",dates:"19 – 20 novembre 2021",nuit:true,
+ drole:["Christophe Roussel met en scène son show mathématiques… avec son fils, dispute jouée comprise.","« C'était tellement bien joué que j'y ai cru et ai été très mal à l'aise ! » — Françoise Rivoal"],
+ photos:[{f:"2021-valenciennes/soiree-2.jpg",x:2,y:8,r:-7},{f:"2021-valenciennes/soiree-1.jpg",x:147,y:0,r:4},{f:"2021-valenciennes/soiree-3.jpg",x:16,y:110,r:3},{f:"2021-valenciennes/soiree-5.jpg",x:150,y:112,r:-3,l:"Sirtaki !",fort:1},{f:"2021-valenciennes/soiree-son.m4a",x:288,y:116,r:5,son:1,l:"le son"},{f:"2021-valenciennes/soiree-4.jpg",x:288,y:34,r:-4,l:"GOAT",fort:1}],
+ v:[["13h30","Accueil, exposants","","f"],["14h","Plans d'expérience et ACP : les cocktails","C. Pierlot (Univ. Lille), V. Guiller (Fuchs), P. Chiapa (JMP)","c"],["16h","Pause, exposants","","f"],["16h15","Formulation et oxydation des parfums","V. Rataj, Univ. Lille","c"],["17h","Histoire des cristaux","B. Maitte, Univ. Lille","c"],["18h30","Apéro","« pot, exposants »","x"],["20h30|nuit blanche|56","Restaurant","grec, avec danse sirtaki","x","etire"]],
+ s:[["9h","Présentation des exposants","","f"],["9h30","Ateliers Adhésifs thermofusibles · Polymères","L. Fabre · J. Pouard","a"],["12h","Vie de l'association","","s"],["12h30","Déjeuner, exposants","","r"],["14h","Bornage des capacités : analyse, synthèse, formulation","X. Bataille · E. Amadéi · P. Goutverg","a"],["15h","Ateliers Métrologie · Conduite de projet","C. Findeling","a"],["16h","Bilan, passage de témoin","","s"],["16h30","Clôture","","s"]],
+ src:"rasf.fr/journees-rasf"},
+{an:2022,ed:"6es Journées",ville:"Reims",lieu:"Lycée Hugues Libergier",dates:"18 – 19 novembre 2022",
+ photos:[{f:"2022-reims/reims-1.jpg",x:6,y:22,r:-6},{f:"2022-reims/reims-2.jpg",x:148,y:0,r:3},{f:"2022-reims/reims-3.jpg",x:288,y:26,r:-3,l:"la team de Nantes"}],
+ drole:["Une altercation simulée en pleine présentation de Xavier Bataille : le prétexte trouvé avec Christophe Roussel pour qu'il prenne la main.","« Une petite équipe de chimie (4, maintenant 3) : c'est aussi avec ce genre d'événement qu'on a forgé une véritable cohésion. » — l'équipe de Nantes"],
+ v:[["14h","Ouverture","","s"],["14h15","Le champagne : la chimie, de l'élaboration aux bulles","C. Bliard, Université de Reims","c"],["15h15","Le suivi analytique des vins de Champagne","M.-C. Bertemès, Moët & Chandon","c"],["16h15","Pause, stands des exposants","","f"],["17h15","La formulation des adhésifs","L. Dupuis, Ictyodev","c"],["18h15","Dégustation de champagne","Griffon-Trichet","x"],["20h30","Restaurant","à l'Apostrophe","x","media"]],
+ s:[["9h","La photochimie en synthèse organique","N. Hoffmann, ICMR","c"],["10h","Utilisation des statistiques en BTS","X. Bataille","c"],["10h45","Pause, stands des exposants","","f"],["11h30","Solutions sucrées et métaux dans les végétaux","P. Triboulet","c"],["12h30","Buffet","","r"],["14h","Ateliers Outils numériques · Spectrométrie de masse","C. Rémaud, M.-O. Reula · L. Brun","a"],["15h","Échanges sur nos pratiques","","s"],["16h","Clôture","","s"]],
+ src:"PDF du programme, liste info-btsmdc, 15/11/2022"},
+{an:2023,ed:"7es Journées",ville:"Bordeaux",lieu:"Lycée Saint-Louis",dates:"24 – 25 novembre 2023",
+ drole:["Alerte à la bombe au lycée Saint-Louis dans la nuit du jeudi au vendredi : repli en catastrophe à l'ISVV pour la première journée. « Beaucoup de stress sur le moment !! » — Françoise Rivoal",{t:"🎉 Bonne retraite, Françoise ! (depuis le 1er novembre 2026)",confetti:1}],
+ v:[["10h","Visite de l'entreprise Unikalo, Mérignac","","v"],["13h","Accueil, café","","r"],["14h","Erasmus en BTS MdC, témoignages d'anciens","F. Braud","c"],["15h","Polymères « intelligents » en cosmétique","Polymerexpert","c"],["16h","Pause café","","r"],["17h","Changement climatique et typicité des vins","C. Thibon, ISVV","c"],["18h","Apéro","dégustation de vins commentée","r"],["20h30|1h|26","Restaurant","au Couvent, quartier des Chartrons","r"]],
+ s:[["8h30","Accueil, café","","r"],["9h","Ateliers et démonstrations en laboratoire avec les fournisseurs","","a"],["12h30","Repas","","r"],["14h","Bilan des ateliers : projets, évaluation, recrutement","","s"],["15h30","Électrodes et batteries de demain","J. Marbaix, SAFT","c"],["16h30","Les incertitudes sans calculs","C. Roussel","c"],["17h","Clôture","","s"]],
+ src:"PDF « Programme Journées RASF Bordeaux 2023 »"},
+{an:2024,ed:"8es Journées",book:[{f:"2024-paris/paris-1.jpg"},{f:"2024-paris/paris-2.jpg"},{f:"2024-paris/book-1.jpg"},{f:"2024-paris/book-2.jpg"},{f:"2024-paris/book-3.jpg"}],ville:"Paris",lieu:"ENCPB, puis ETSL le samedi après-midi",dates:"22 – 23 novembre 2024",
+ v:[["9h","« Chimie d'autrefois » : musée Tillequin, laboratoire Frémy","","v"],["13h","Accueil, stands fournisseurs","","f"],["13h35","Peptides et membranes lipidiques","A. Walrant, Sorbonne Université","c"],["14h15","Relocaliser la production chimique en France","G. Waroqueaux, L. Cazanave, Interor","c"],["15h45","Pause, stands (dont la SCF)","","f"],["16h15","Les cahiers de laboratoire de Pasteur","A. Renier-Lajeunie","c"],["16h45","Recrutements STL et STS Métiers de la chimie","X. Bataille","c"],["17h15","BTS-BUT : les ponts possibles","F. Réal, ACD Chimie","c"],["19h30","Apéro","au Petit Bouillon Vavin","x"],["20h30|Il est quelle heure ?|84","Restaurant","au Petit Bouillon Vavin","x","aube"]],
+ s:[["8h30","Accueil","","r"],["9h","8 ateliers : LUM, Labomat, Magritek, Metrohm, réalité virtuelle, titrateur, microcontrôleurs, JMP","fournisseurs et collègues","a"],["midi","Repas","","r"],["14h30","Créer une mini-entreprise","C. Findeling, S. Bockler","c"],["15h30","U41-U42 : suite de la lettre ouverte aux IA-IPR","","s"],["16h","Vie de l'association, projet ACD-RASF","","s"],["16h30","Passage de témoin","","s"],["17h","Clôture","","s"]],
+ src:"PDF « programme-JRASF2024 » (version du 06/11/2024)"},
+{an:2025,ed:"9es Journées",ville:"Angers",lieu:"ETSCO",dates:"21 – 22 novembre 2025",
+ v:[["9h","Musée du matériel expérimental, UCO","","v"],["10h30","Visites : château d'Angers, musée Jean Lurçat ou UCO","","v"],["13h30","Accueil, café","","r"],["14h","Chimie du fluor et superacides","S. Thibaudeau, Univ. Poitiers","c"],["15h","Les polluants éternels et les PFAS","J. Négriollo, Inovalys","c"],["16h","Pause fournisseurs","","f"],["16h45","Ateliers","","a"],["17h30","Radiochimie (en visio)","M. Steffan, Institut Curie","c"],["19h30","Apéro","","x"],["20h30|3h du mat|46|flou","Restaurant","repas du soir","x"]],
+ s:[["9h","Ateliers : Metrohm, Brioche Pasquier, X-rite, gamification, Erasmus+","A. Martin, C. Debaig…","a"],["11h","Arrivée des jeunes","tout droit sortis d'une nuit à La Chapelle, la boîte de nuit d'Angers","j"],["12h30","Repas à l'ETSCO","","r"],["13h30","IA : partage et retours d'expériences","M.-O. Reula, C. Roussel","a"],["15h","Vie de l'association : courriers et rencontres avec les inspecteurs","","s"],["16h45","Passage de témoin, clôture","","s"]],
+ src:"PDF « Pré-programme_V26-09 »"},
+{an:2026,ed:"Les 10 ans",ville:"Paris",lieu:"ACTED, 5 rue du Général Foy",dates:"20 – 21 novembre 2026",
+ v:[["9h","Visite du laboratoire Frémy","","v"],["10h45","Visite du musée Tillequin","","v"],["14h","La mise en place du BTS Métiers de la Chimie","M.-B. Mauhourat, M. Vigneron","c"],["","Bilan des 10 ans de RASF","","s"],["","Interventions France Chimie et IGÉSR","L. Laumond · C. Bruyère","c"],["15h30","RASF en 2026 : le livre, le projet national","","s"],["16h45","Présentation de la mini-entreprise","","c"],["17h","L'enseignement inclusif","G. Bacquet, SciencExpert","c"],["19h30","Apéro","","x"],["20h30|The night is young|40","Restaurant","au Baratin, 41 bd Saint-Marcel","x"]],
+ s:[["9h","IA et perspectives","C. Remaud, St Félix-La Salle, Nantes","c"],["9h30","La formulation, où 1 + 1 font parfois 3 : HLD, Hansen, COSMO-RS","J.-M. Aubry, ENSCL","c"],["10h30","Pause fournisseurs","","f"],["11h","Photochromisme : de la recherche à l'enseignement expérimental","S. Clède (Stanislas), J. Piard (ENS Paris-Saclay)","c"],["13h30","Assemblée générale","","s"],["14h30","Ateliers IA","J. Pouard, M.-O. Reula","a"],["17h","Clôture","","s"]],
+ src:"rasf.fr/journees-rasf/2026-paris"}
+];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+/* "20h30|minuit|20" : début, fin, longueur du trait en px */
+const plage=h=>{const p=String(h).split("|");return p.length<2?`<div class="h">${esc(h)}</div>`:`<div class="h plage"><span>${esc(p[0])}</span><i style="height:${+p[2]||20}px"></i><span${p[3]==="flou"?' class="flou"':""}>${esc(p[1])}</span></div>`};
+/* Photos privées : déchiffrées seulement si le code a été saisi sur la page d'accueil (voir coffre.js) */
+const PH={};
+const polas=e=>{const ok=(e.photos||[]).filter(p=>PH[p.f]);if(!ok.length)return "";
+ return `<div class="polas">${ok.map((p,i)=>`<div class="pola${p.son?" son":""}" style="--i:${i};--r:${p.r}deg;left:${p.x}px;top:${p.y}px">${p.son?`<button type="button" data-son="${PH[p.f]}"><b>♪</b>écouter</button>`:`<img src="${PH[p.f]}" alt="">`}<span${p.fort?' class="fort"':""}>${esc(p.l||"")}</span></div>`).join("")}</div>`};
+/* Scènes animées dans la zone du restaurant */
+/* Lyon : andouillette, rosette et saucisson brioché (dessins originaux) */
+const sceneLyon=`<div class="scene lyon">
+ <figure class="mets" style="--k:0"><svg viewBox="0 0 120 70" width="120" height="70">
+  <rect x="14" y="20" width="92" height="30" rx="15" fill="#c98f58" stroke="#1b2440" stroke-width="3"/>
+  <path d="M34 22L28 48M52 21L46 49M70 21L64 49M88 22L82 48" stroke="#8a5530" stroke-width="3" stroke-linecap="round"/>
+  <path d="M14 35Q4 30 6 24M14 35Q4 40 6 46M106 35Q116 30 114 24M106 35Q116 40 114 46" fill="none" stroke="#1b2440" stroke-width="2.5" stroke-linecap="round"/>
+ </svg><figcaption>andouillette</figcaption></figure>
+ <figure class="mets" style="--k:1"><svg viewBox="0 0 120 70" width="120" height="70">
+  <rect x="6" y="22" width="78" height="28" rx="12" fill="#9e3a3a" stroke="#1b2440" stroke-width="3"/>
+  <path d="M14 24L26 48M30 24L42 48M46 24L58 48M62 24L74 48M14 48L26 24M30 48L42 24M46 48L58 24M62 48L74 24" stroke="#f3e6d3" stroke-width="1.4" opacity=".7"/>
+  <circle cx="100" cy="36" r="15" fill="#c95a62" stroke="#1b2440" stroke-width="3"/>
+  <circle cx="95" cy="31" r="2.2" fill="#fff"/><circle cx="104" cy="33" r="1.8" fill="#fff"/><circle cx="98" cy="41" r="2" fill="#fff"/><circle cx="106" cy="42" r="1.6" fill="#fff"/>
+ </svg><figcaption>rosette</figcaption></figure>
+ <figure class="mets" style="--k:2"><svg viewBox="0 0 120 70" width="120" height="70">
+  <path d="M8 56V34Q8 14 34 14H86Q112 14 112 34V56Z" fill="#e2a64a" stroke="#1b2440" stroke-width="3"/>
+  <path d="M20 22Q30 17 40 22M50 19Q60 14 70 19M80 22Q90 17 100 22" fill="none" stroke="#b9772a" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="60" cy="42" rx="20" ry="12" fill="#f3d9a6" stroke="#1b2440" stroke-width="2"/>
+  <ellipse cx="60" cy="42" rx="12" ry="7.5" fill="#c4545a"/><circle cx="57" cy="40" r="1.6" fill="#fff"/><circle cx="63" cy="44" r="1.4" fill="#fff"/>
+ </svg><figcaption>saucisson brioché</figcaption></figure>
+</div>`;
+const scene=e=>e.scene==="lyon"?sceneLyon:e.scene!=="marseille"?"":`<div class="scene">
+ <figure class="pastis"><svg viewBox="0 0 120 170" width="120" height="170">
+  <defs><clipPath id="verre"><path d="M22 40 L98 40 L88 160 L32 160 Z"/></clipPath></defs>
+  <g clip-path="url(#verre)"><rect class="liquide" x="0" y="78" width="120" height="100"/><rect class="eau" x="0" y="60" width="120" height="20"/></g>
+  <path d="M22 40 L98 40 L88 160 L32 160 Z" fill="none" stroke="#1b2440" stroke-width="3" stroke-linejoin="round"/>
+  <circle class="goutte" cx="60" cy="0" r="4"/><circle class="goutte g2" cx="56" cy="0" r="3"/><circle class="goutte g3" cx="64" cy="0" r="3.5"/>
+ </svg><figcaption>Pastis : l'effet ouzo,<br>une émulsion spontanée</figcaption></figure>
+</div>`;
+const book=e=>{const ok=(e.book||[]).filter(p=>PH[p.f]);if(!ok.length)return "";
+ return `<div class="book"><div class="lab">Souvenirs et book J-RASF ${e.an}</div><div class="pages">${ok.map((p,i)=>`<img src="${PH[p.f]}" alt="Page ${i+1} du book" style="--i:${i}">`).join("")}</div></div>`};
+/* 2016 : le planning de rotation réel (onglet « Planning Ateliers » du fichier des badges) */
+const ROT_H=["9h","9h45","11h","11h45","14h","14h45","16h","16h45"];
+const ROT=[["Elcometer","Hall","MTS","Anton Paar","Erichsen","Hall","Thermo F","libre"],["Labomat","Hall","Ametek","PerkinElmer","Thermo A","Hall","X-Rite","libre"],["BYK","Hall","Elcometer","MTS","Anton Paar","Hall","Erichsen","libre"],["Konica","Hall","Labomat","Ametek","PerkinElmer","Hall","Thermo A","libre"],["MAC Tech.","BYK","Hall","Elcometer","MTS","Anton Paar","Hall","libre"],["VMI","Konica","Hall","Labomat","Ametek","PerkinElmer","Hall","libre"],["Thermo F","MAC Tech.","Hall","BYK","Elcometer","MTS","Hall","libre"],["X-Rite","VMI","Hall","Konica","Labomat","Ametek","Hall","libre"],["Erichsen","Thermo F","MAC Tech.","Hall","BYK","Elcometer","MTS","libre"],["Thermo A","X-Rite","VMI","Hall","Konica","Labomat","Ametek","libre"],["Anton Paar","Erichsen","Thermo F","Hall","MAC Tech.","BYK","Elcometer","libre"],["PerkinElmer","Thermo A","X-Rite","Hall","VMI","Konica","Labomat","libre"],["Hall","Anton Paar","Erichsen","Thermo F","Hall","MAC Tech.","BYK","libre"],["Hall","PerkinElmer","Thermo A","X-Rite","Hall","VMI","Konica","libre"],["Hall","MTS","Anton Paar","Erichsen","Hall","Thermo F","MAC Tech.","libre"],["Hall","Ametek","PerkinElmer","Thermo A","Hall","X-Rite","VMI","libre"]];
+const ROT_C={"Elcometer":190,"MTS":205,"Anton Paar":175,"Erichsen":160,"Thermo F":220,"MAC Tech.":145,"BYK":235,"Labomat":280,"Ametek":295,"PerkinElmer":310,"Thermo A":265,"X-Rite":325,"VMI":340,"Konica":250};
+const rotation=e=>!e.rotation?"":`<div class="rotation"><div class="sms"><svg viewBox="0 0 14 22" width="12" height="19"><rect x="1" y="1" width="12" height="20" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="7" cy="17" r="1.3" fill="currentColor"/></svg>SMS : changez d'atelier !</div>
+ <div class="grille" style="--n:${ROT_H.length}"><b></b>${ROT_H.map((h,c)=>`<b class="col" data-c="${c}">${h}</b>`).join("")}
+ ${ROT.map((r,g)=>`<i>G${g+1}</i>${r.map((a,c)=>`<span data-c="${c}" class="${a==="Hall"?"hall":a==="libre"?"libre":""}"${ROT_C[a]?` style="--h:${ROT_C[a]}"`:""}>${a}</span>`).join("")}`).join("")}</div></div>`;
+/* Coupe du lycée : hall (niveau 3) et étages des ateliers ; les équipes se déplacent à chaque créneau */
+const SALLE={"Elcometer":"5-43","Labomat":"5-45","BYK":"5-46","Konica":"5-48","MAC Tech.":"5-51","VMI":"5-52","X-Rite":"5-78","Thermo F":"5-80","Erichsen":"10-30","Thermo A":"10-32","Anton Paar":"10-34","PerkinElmer":"10-44","MTS":"12-30","Ametek":"12-32"};
+const NIV=[["Niv. 12",["12-30","12-32"]],["Niv. 10",["10-30","10-32","10-34","10-44"]],["Niv. 5",["5-43","5-45","5-46","5-48","5-51","5-52","5-78","5-80"]]];
+const batiment=e=>!e.rotation?"":`<div class="batiment"><div class="lab">Le lycée ce jour-là : le hall et trois étages d'ateliers<span class="heure"></span></div><div class="coupe" id="coupe">
+ ${(()=>{let a=0;return NIV.map(([n,ss])=>`<div class="niv"><em>${n}</em>${ss.map(x=>`<span class="salle" data-s="${x}">Atelier ${++a}</span>`).join("")}</div>`).join("")})()}
+ <div class="niv"><em>Niv. 3</em><span class="salle hall" data-s="hall">Hall d'accueil · stands des sociétés</span></div>
+ ${ROT.map((r,g)=>`<i class="eq${g%2?" paire":""}" data-g="${g}">Gr${g+1}</i>`).join("")}</div></div>`;
+function deplacer(c){const co=document.getElementById("coupe");if(!co)return;const pos=x=>{const el=co.querySelector(`[data-s="${x}"]`);return[el.offsetLeft,el.offsetTop,el.offsetWidth,el.offsetHeight]};
+ let k=0;ROT.forEach((r,g)=>{const a=c<0?"Hall":r[c],d=co.querySelector(`[data-g="${g}"]`);let x,y;
+  if(SALLE[a]){const[l,t,w,h]=pos(SALLE[a]);x=l+w/2-22;y=t+h-30;d.classList.remove("libre")}
+  else{const[l,t,w,h]=pos("hall");x=l+12+(k%8)*52;y=t+h-30-(k%16>=8?27:0);k++;d.classList.toggle("libre",a==="libre")}
+  d.style.left=x+"px";d.style.top=y+"px"})}
+const bandeau=e=>!e.societes?"":`<div class="bandeau"><div class="lab">Les sociétés inscrites</div><div class="defil"><div class="piste">${[...e.societes,...e.societes].map(n=>`<span>${esc(n)}</span>`).join("")}</div></div></div>`;
+let rotT=null;
+function lancerRotation(){clearInterval(rotT);rotT=null;const b=document.querySelector("#fiche .batiment");if(!b)return;let c=-1;deplacer(-1);setTimeout(()=>{if(c<0)deplacer(-1)},700);document.fonts&&document.fonts.ready.then(()=>{if(c<0)deplacer(-1)});
+ const pas=()=>{c=(c+1)%ROT_H.length;b.querySelector(".heure").textContent=ROT_H[c];const k=c;setTimeout(()=>deplacer(k),1200)};
+ if(document.documentElement.classList.contains("apercu")){pas();return}
+ setTimeout(()=>{pas();rotT=setInterval(pas,5000)},1500)}
+/* 2016 : les trajets remboursés (feuille « Vérification remboursement » du 04/05/2016 ; bilan financier 2016) */
+const trajets=e=>!e.trajets?"":`<div class="trajets"><div class="lab">Les trajets remboursés</div>
+ <div class="tr-corps"><b>40</b><span>collègues remboursés de leur billet aller-retour, en train ou en avion</span></div>
+ <p>De Pau à Lille, de Nice à Nantes… et jusqu'à <strong>Pointe-à-Pitre</strong>, en Guadeloupe.</p></div>`;
+const coulisses=e=>e.drole&&e.drole.length?`<div class="drole"><div class="lab">Témoignages et anecdotes</div>${e.drole.map((d,i)=>typeof d==="string"?`<p style="--i:${i}">${esc(d)}</p>`:`<p style="--i:${i}"${d.confetti?' class="confetti"':""}>${esc(d.t)}${d.anon?`<span class="sig"><span class="anon">— ${esc(d.anon)}</span><span class="vrai">${esc(d.vrai)}</span></span>`:""}</p>`).join("")}</div>`:"";
+const chapelle=`<a class="vitrail" href="https://chapelle.club/" target="_blank" rel="noopener" title="chapelle.club"><svg viewBox="0 0 90 120" width="90" height="120"><defs><linearGradient id="vg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff3fb4"/><stop offset=".5" stop-color="#7b5cff"/><stop offset="1" stop-color="#22d3ee"/></linearGradient><clipPath id="arche"><path d="M8 118 V48 Q45 -10 82 48 V118 Z"/></clipPath></defs><path d="M8 118 V48 Q45 -10 82 48 V118 Z" fill="url(#vg)" stroke="#f2b41f" stroke-width="3"/><path d="M45 14 V118 M8 70 H82 M8 94 H82" stroke="#0b1f4d" stroke-width="2.5" opacity=".7"/><g clip-path="url(#arche)"><g class="faisceau"><path d="M45 60 L10 0 L24 0 Z" fill="#fff" opacity=".55"/></g></g></svg><span>chapelle.club ↗</span></a>`;
+const liste=(arr,o=0,an=0,anim="",e=null)=>arr.map(([h,t,q,k,opt],i)=>{if(k==="j")return `<div class="item jeunes" style="--i:${i+o}">${plage(h)}<div class="pt" style="background:#ff3fb4"></div><div class="corps"><div class="t">${esc(t)}</div><div class="q">${esc(q)}</div></div>${chapelle}</div>`;const et=opt==="etire"||(opt==="media"&&!!e&&(e.photos||[]).some(p=>PH[p.f]));return `<div class="item${k==="x"?" fete"+(anim?" "+anim:""):""}${et?" etire":""}${et&&opt==="media"?" media":""}${opt==="aube"?" aube":""}" style="--i:${i+o}${k==="x"?`;--a:${feteA(an)};--fs:${fete(an)}px`:""}">${plage(h)}<div class="pt" style="background:var(--${C[k]})"></div><div class="corps"><div class="t"${k==="x"?` style="font-size:${fete(an)}px"`:""}>${esc(t)}</div>${q?`<div class="q">${esc(q)}</div>`:""}${et&&e?polas(e)+scene(e):""}</div></div>`}).join("");
+function jourSem(e,i){const d=e.dates.match(/^(\d+)/);return ""}
+let cur=0;
+try{const k=localStorage.getItem("rasf.programmes.annee");const j=E.findIndex(e=>String(e.an)===k);if(j>=0)cur=j}catch(e){}
+/* Une adresse par année : 02-journees.html#2019 ouvre directement 2019 */
+{const j=E.findIndex(e=>"#"+e.an===location.hash);if(j>=0)cur=j}
+addEventListener("message",ev=>{const m=ev.data||{};if(m.rasf!=="annee")return;const j=E.findIndex(e=>String(e.an)===String(m.v));if(j>=0&&j!==cur){cur=j;rendre()}});
+/* Clic sur « Les Journées » dans le fil d'Ariane : retour à la première année */
+document.addEventListener("rasf-debut",()=>{if(cur!==0){cur=0;rendre()}});
+addEventListener("hashchange",()=>{const j=E.findIndex(e=>"#"+e.an===location.hash);if(j>=0&&j!==cur){cur=j;rendre()}});
+{const q=new URLSearchParams(location.search).get("ecran");if(q!==null&&E[+q])cur=+q}
+/* L'adresse (#2019) l'emporte sur tout le reste */
+{const j=E.findIndex(e=>"#"+e.an===location.hash);if(j>=0)cur=j}
+/* 2020 : participants fictifs (clin d'œil à Analyse, Synthèse, Formulation) et répliques de début de visio */
+const VISIO=[
+ {nom:"Analyse",c1:"#3d6fb6",c2:"#22406e",mute:1},
+ {nom:"Synthèse",c1:"#2e7d6b",c2:"#1a4a3f",etat:"noire"},
+ {nom:"Formulation",c1:"#8a5a9e",c2:"#4d3159",etat:"fige"},
+ {nom:"Le bureau",c1:"#c9861a",c2:"#7a4f0c"},
+ {nom:"Un fournisseur",c1:"#555",c2:"#333",etat:"recon"},
+ {nom:"iPhone de Prof",c1:"#b23b3b",c2:"#6a2020",etat:"couche"}];
+const REPLIQUES=[[0,"Tu me vois ?"],[3,"Je t'entends pas…"],[1,"T'es en muet !"],[2,"Je te vois pas"],[0,"Et là, tu m'entends ?"],[3,"Ça a figé…"],[5,"Je reviens, j'ai planté"],[1,"Il y a de l'écho"],[3,"Coupe ton micro !"],[0,"Allô ?"],[2,"Je… te… vois… p…"],[3,"On attend encore qui ?"],[5,"Comment on partage l'écran ?"],[1,"Tu me vois, là ?"]];
+const tuile=(t,i)=>{const n=`<div class="nom">${t.mute?'<span class="mute">🎤̸</span>':""}${esc(t.nom)}</div>`;
+ if(t.etat==="noire")return `<div class="tuile noire" data-t="${i}" style="--c1:${t.c1};--c2:${t.c2}"><div class="ini">${t.nom[0]}</div>${n}</div>`;
+ if(t.etat==="recon")return `<div class="tuile recon" data-t="${i}"><i></i>Reconnexion…${n}</div>`;
+ return `<div class="tuile${t.etat?" "+t.etat:""}" data-t="${i}" style="--c1:${t.c1};--c2:${t.c2}">${t.etat==="fige"?'<div class="bandeau">Connexion instable</div>':""}<div class="perso"></div>${n}</div>`};
+let visioT=null,visioD=null,visioK=0;
+function bulle(){const m=document.getElementById("mos");if(!m)return;const[i,txt]=REPLIQUES[visioK++%REPLIQUES.length];const t=m.querySelector(`[data-t="${i}"]`);
+ m.querySelectorAll(".bulle").forEach(b=>b.remove());m.querySelectorAll(".parle").forEach(x=>x.classList.remove("parle"));
+ const b=document.createElement("div");b.className="bulle";b.textContent=txt;t.appendChild(b);t.classList.add("parle")}
+function lancerVisio(){clearInterval(visioT);clearTimeout(visioD);visioT=null;visioK=0;if(!document.getElementById("mos"))return;
+ if(document.documentElement.classList.contains("apercu")){bulle();return}
+ visioD=setTimeout(()=>{bulle();visioT=setInterval(bulle,1700)},900)}
+/* Cercle « thématique récurrente » autour des lignes Apéro / Restaurant (positions en px de la scène) */
+function cercler(e){if(!e.cercle)return;const f=[...document.querySelectorAll("#fiche .jour:first-child .item.fete")];if(!f.length)return;
+ const j=f[0].parentElement,x=f[0].offsetLeft,y=f[0].offsetTop,w=f[0].offsetWidth,h=f[f.length-1].offsetTop+f[f.length-1].offsetHeight-y;
+ const mx=18,my=10,W=w+2*mx,H=h+2*my;
+ j.insertAdjacentHTML("beforeend",`<svg class="cercle" style="left:${x-mx}px;top:${y-my}px" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><rect pathLength="1" x="4" y="4" width="${W-8}" height="${H-8}" rx="34" transform="rotate(-.6 ${W/2} ${H/2})"/></svg><div class="recurrent" style="left:${x+30}px;top:${y+h+my+10}px">Ainsi que d'autres thématiques récurrentes…<span class="rec-liste"><span>conférences</span><span>moments d'échange avec les fournisseurs<br>&nbsp;&nbsp;&nbsp;et les collègues</span><span>CCF4</span></span></div>`)}
+let nbT=[];
+function nuitBlanche(e){nbT.forEach(clearTimeout);nbT=[];if(!e.nuit||document.documentElement.classList.contains("apercu"))return;
+ const it=document.querySelector("#fiche .item.etire"),js=document.querySelector("#fiche .jours");if(!it||!js)return;
+ const cols=[...js.querySelectorAll(".jour")],pl=it.querySelector(".h.plage"),X=1500,H0=it.offsetHeight;
+ const heures=["22h","23h","minuit","1h","2h","3h","4h","5h","6h","7h"];
+ heures.forEach((h,k)=>{const m=document.createElement("em");m.className="marque";m.textContent=h;m.style.top=(H0-30+(k+1)*X/(heures.length+1))+"px";pl.appendChild(m)});
+ it.style.flex="none";it.style.height=H0+"px";js.classList.add("defile");
+ /* Défilement automatique : en descendant, chaque photo apparaît et reste à sa place le long de la nuit ;
+    puis en remontant, les photos glissent et se regroupent en collage. */
+ const fin=pl.querySelector("span:last-of-type");fin.style.animation="none";fin.style.opacity="0";
+ const ps=[...it.querySelectorAll(".pola")],N=ps.length,vu=new Array(N).fill(false);
+ ps.forEach(q=>{q.style.animation="none";q.style.opacity="0";q.dataset.y0=parseFloat(q.style.top)||0});
+ const seuil=k=>(k+.6)/(N+.6),decal=k=>X*(k+.5)/(N+.4)+(k===N-1?210:0); /* la dernière photo (GOAT) descend jusqu'à 7h du matin */
+ let pr=0;
+ function poser(v){pr=Math.max(0,Math.min(1,v));
+  it.style.height=(H0+X*pr)+"px";cols.forEach(c=>c.style.transform=`translateY(${-X*pr}px)`);
+  fin.style.opacity=pr>.95?1:0;fin.style.transition="opacity .4s";
+  ps.forEach((q,k)=>{if(pr>=seuil(k)&&!vu[k]){vu[k]=true;const r=parseFloat(q.style.getPropertyValue("--r"))||0;
+     q.animate([{opacity:0,transform:`translateY(-70px) rotate(${r-25}deg) scale(1.3)`},{opacity:1,transform:`rotate(${r}deg)`}],{duration:600,easing:"cubic-bezier(.2,.9,.3,1.2)"})}
+   if(vu[k]){q.style.opacity="1";q.style.top=(+q.dataset.y0+decal(k)*Math.min(1,pr/seuil(k)))+"px"}})}
+ poser(0);
+ const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+ function jouer(de,a,duree,suite){const t0=performance.now();const pas=t=>{if(!document.contains(it))return;const x=Math.min(1,(t-t0)/duree);poser(de+(a-de)*ease(x));if(x<1)requestAnimationFrame(pas);else if(suite)suite()};requestAnimationFrame(pas)}
+ /* descente lente (photo par photo), pause au bout de la nuit, puis remontée et regroupement */
+ nbT.push(setTimeout(()=>jouer(0,1,9000,()=>nbT.push(setTimeout(()=>jouer(1,0,3200),2200))),3800))}
+/* Reims 2022 : deux flûtes se remplissent, trinquent, et les bulles montent sans fin */
+const CHAMP=`<svg class="champ" viewBox="0 0 160 112" aria-hidden="true"><g class="flute f1" style="transform-origin:58px 108px">
+   <defs><clipPath id="cf1"><path d="M47 14 L69 14 L65 62 Q58 70 51 62 Z"/></clipPath></defs>
+   <g clip-path="url(#cf1)"><rect class="vin" x="44" y="14" width="28" height="60"/>
+    <circle class="bul" cx="55" cy="62" r="1.6" style="--k:0"/><circle class="bul" cx="61" cy="62" r="1.2" style="--k:1"/><circle class="bul" cx="58" cy="62" r="1.4" style="--k:2"/><circle class="bul" cx="53" cy="62" r="1" style="--k:3"/><circle class="bul" cx="63" cy="62" r="1.3" style="--k:4"/></g>
+   <path class="verre" d="M47 14 L69 14 L65 62 Q58 70 51 62 Z M58 68 L58 100 M46 104 Q58 98 70 104"/>
+  </g><g class="flute f2" style="transform-origin:102px 108px">
+   <defs><clipPath id="cf2"><path d="M91 14 L113 14 L109 62 Q102 70 95 62 Z"/></clipPath></defs>
+   <g clip-path="url(#cf2)"><rect class="vin" x="88" y="14" width="28" height="60"/>
+    <circle class="bul" cx="99" cy="62" r="1.6" style="--k:0"/><circle class="bul" cx="105" cy="62" r="1.2" style="--k:1"/><circle class="bul" cx="102" cy="62" r="1.4" style="--k:2"/><circle class="bul" cx="97" cy="62" r="1" style="--k:3"/><circle class="bul" cx="107" cy="62" r="1.3" style="--k:4"/></g>
+   <path class="verre" d="M91 14 L113 14 L109 62 Q102 70 95 62 Z M102 68 L102 100 M90 104 Q102 98 114 104"/>
+  </g><g class="etincelle"><path d="M80 6 L82 14 L90 16 L82 18 L80 26 L78 18 L70 16 L78 14 Z"/><circle cx="66" cy="8" r="1.6"/><circle cx="94" cy="6" r="1.4"/><circle cx="88" cy="26" r="1.2"/></g></svg>`;
+function champagne(e){if(e.an!==2022)return;const it=[...document.querySelectorAll("#fiche .item")].find(x=>x.textContent.includes("Dégustation de champagne"));if(!it)return;it.classList.add("a-champ");it.insertAdjacentHTML("beforeend",CHAMP)}
+/* Contour simplifié de la France (lon, lat) et villes des Journées */
+const FR=[[2.37,51.05],[2.55,51.09],[3.2,50.75],[4.15,50.0],[4.8,49.95],[5.8,49.55],[6.4,49.45],[7.0,49.15],[8.2,48.98],[7.8,48.6],[7.6,47.6],[7.0,47.5],[6.1,46.6],[6.0,46.15],[6.8,46.4],[6.8,45.9],[7.1,45.25],[6.65,45.0],[7.0,44.25],[7.6,43.8],[7.25,43.7],[6.6,43.15],[5.9,43.1],[5.35,43.3],[4.8,43.4],[4.1,43.5],[3.2,43.0],[3.05,42.5],[2.0,42.4],[0.7,42.8],[-0.3,42.8],[-1.4,43.25],[-1.78,43.37],[-1.25,44.6],[-1.15,45.6],[-1.25,45.9],[-1.15,46.2],[-2.15,46.9],[-2.2,47.27],[-2.55,47.3],[-4.37,47.8],[-4.75,48.35],[-4.2,48.7],[-3.0,48.85],[-2.0,48.65],[-1.6,48.75],[-1.62,49.64],[-1.25,49.7],[-1.1,49.35],[0.1,49.45],[1.2,49.95],[1.6,50.15],[1.6,50.75],[1.85,50.95]];
+const CORSE=[[8.6,42.9],[9.4,43.0],[9.55,42.1],[9.2,41.4],[8.6,41.9]];
+const VILLES={"Paris":[2.35,48.85],"Angers":[-0.55,47.47],"Marseille":[5.37,43.3],"Lyon":[4.83,45.76],"Valenciennes":[3.52,50.36],"Reims":[4.03,49.26],"Bordeaux":[-0.58,44.84]};
+const COTE={"Paris":-1,"Angers":-1,"Bordeaux":-1,"Valenciennes":1,"Reims":1,"Lyon":1,"Marseille":1};
+const LYC={2016:"ENCPB",2017:"ETSCO",2018:"Lycée Jean Perrin",2019:"Lycée La Martinière",2020:"Lycée de l'Escaut",2021:"Lycée de l'Escaut",2022:"Lycée Libergier",2023:"Lycée Saint-Louis",2024:"ENCPB",2025:"ETSCO",2026:"ACTED"};
+function carteFr(e){const k=27,cx=Math.cos(46.5*Math.PI/180),pr=([lo,la])=>[((lo+5.2)*cx*k).toFixed(1),((51.4-la)*k).toFixed(1)];
+ const W=Math.round(14.9*cx*k)+4,H=Math.round(10.2*k)+4,poly=a=>a.map(pr).map(q=>q.join(",")).join(" ");
+ const autres=Object.entries(VILLES).filter(([v])=>v!==e.ville).map(([,c])=>{const[x,y]=pr(c);return `<circle class="autre" cx="${x}" cy="${y}" r="4"/>`}).join("");
+ const[x,y]=pr(VILLES[e.ville]),gauche=COTE[e.ville]<0,tx=gauche?x-14:+x+14,an=gauche?"end":"start";
+ /* noms des villes déjà visitées (hors ville de l'année) */
+ const vues=[...new Set(E.filter(z=>z.an<e.an&&!z.annule).map(z=>z.ville))].filter(v=>v!==e.ville);
+ const noms=vues.map(v=>{const[vx,vy]=pr(VILLES[v]),g=COTE[v]<0;return `<text class="ancienne" x="${g?vx-8:+vx+8}" y="${+vy+4}" text-anchor="${g?"end":"start"}">${esc(v)}</text>`}).join("");
+ /* trajet : villes des éditions précédentes, dans l'ordre, jusqu'à celle de l'année */
+ const etapes=E.filter(x=>x.an<=e.an&&(!x.annule||x===e)).map(x=>pr(VILLES[x.ville]).map(Number));
+ const segs=etapes.slice(1).map((b,i)=>{const a=etapes[i],mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2,dx=b[0]-a[0],dy=b[1]-a[1],c=[mx-dy*.18,my+dx*.18];
+  return `<path class="seg${i===etapes.length-2?" dernier":""}" style="--k:${i}" pathLength="1" d="M${a[0]} ${a[1]} Q${c[0].toFixed(1)} ${c[1].toFixed(1)} ${b[0]} ${b[1]}"/>`}).join("");
+ return `<svg class="carte-fr" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-label="Carte : ${esc(e.ville)}"><polygon class="pays" points="${poly(FR)}"/><polygon class="pays" points="${poly(CORSE)}"/>${segs}${autres}${noms}<circle class="onde" cx="${x}" cy="${y}" r="7"/><circle class="ici" cx="${x}" cy="${y}" r="7"/><text class="nom" x="${tx}" y="${+y-2}" text-anchor="${an}">${esc(e.ville)}</text><text class="lyc" x="${tx}" y="${+y+15}" text-anchor="${an}">${esc(LYC[e.an]||"")}</text></svg>`}
+function rendre(){majNav();window.rasfSous=E[cur].an+" – "+E[cur].ville;document.dispatchEvent(new CustomEvent("rasf-sous",{detail:window.rasfSous}));
+  const e=E[cur];
+  $("#annees").innerHTML=E.map((x,i)=>`<div class="case"><button class="an${i===cur?" on":""}${x.annule?" annule":""}" data-i="${i}">${x.an}<small>${esc(x.ville)}</small></button></div>`).join("");caler();
+  const cart=`<div class="cartouche"><div class="edition">${esc(e.ed)}</div><div class="annee">${e.an}</div><div class="ville">${esc(e.ville)}</div><div class="lieu">${esc(e.lieu)}</div><div class="dates">${esc(e.dates)}</div>${e.statut?`<div class="statut">${esc(e.statut)}</div>`:""}${carteFr(e)}</div>`;
+  let droite;
+  if(e.visio){
+    droite=`<div class="jours" style="grid-template-columns:1fr"><div class="visio">
+      <div class="titre">Journées de novembre 2020</div>
+      <div class="sous">Annulées. À la place, on découvre la visio…</div>
+      <div class="ecranv"><div class="mos" id="mos">${VISIO.map((t,i)=>tuile(t,i)).join("")}</div>
+      <div class="barrev"><span class="off">🎤</span><span>📷</span><span>🖥️</span><span>✋</span><span class="quit">Quitter</span></div></div>
+      <div class="note">${esc(e.vide.note)}</div></div></div>`;
+  }else if(e.vide){
+    droite=`<div class="jours" style="grid-template-columns:1fr"><div class="vide"><blockquote>${esc(e.vide.citation)}</blockquote>${e.vide.chiffres.length?`<div class="chiffres">${e.vide.chiffres.map(([b,s])=>`<div><b>${b}</b><span>${s}</span></div>`).join("")}</div>`:"<div style='height:30px'></div>"}<p>${esc(e.vide.note)}</p></div></div>`;
+  }else{
+    droite=`<div class="jours"><div class="jour"><h3>${e.jours?e.jours[0]:"Vendredi"}</h3>${liste(e.v,0,e.an,e.feteAnim,e)}${e.chiffres?`<div class="mini-chiffres">${e.chiffres.map(([b,t],i)=>`<div style="--i:${i}"><b>${b}</b><span>${esc(t)}</span></div>`).join("")}</div>`:""}</div><div class="jour"><h3>${e.jours?e.jours[1]:"Samedi"}</h3>${liste(e.s,2,e.an,e.feteAnim,e)}${bandeau(e)}${coulisses(e)}${trajets(e)}${book(e)}</div></div>`;
+  }
+  $("#fiche").innerHTML=cart+droite;lancerVisio();cercler(e);champagne(e);nuitBlanche(e);lancerRotation();
+  if(!document.documentElement.classList.contains('apercu'))try{localStorage.setItem("rasf.programmes.annee",e.an)}catch(err){}
+  try{history.replaceState(null,"","#"+e.an)}catch(err){}
+  if(window.parent!==window)window.parent.postMessage({rasf:"ancre",v:"journees-"+e.an},"*");
+}
+/* Confettis sur toute la page au survol du message de retraite */
+let confT=0;
+function confettis(src){const now=Date.now();if(now-confT<4000)return;confT=now;
+ const st=$("#stage"),cv=document.createElement("canvas");cv.width=1600;cv.height=900;cv.style.cssText="position:absolute;inset:0;pointer-events:none;z-index:50";st.appendChild(cv);
+ const g=cv.getContext("2d"),sc=st.getBoundingClientRect().width/1600,r=src.getBoundingClientRect(),sr=st.getBoundingClientRect();
+ const ox=(r.left+r.width/2-sr.left)/sc,oy=(r.top-sr.top)/sc,cols=["#F2B41F","#ff3fb4","#2faee0","#3ddc84","#ffffff","#8a5a9e"];
+ const P=Array.from({length:220},()=>{const a=-Math.PI/2+(Math.random()-.5)*2.4,v=9+Math.random()*16;return{x:ox+(Math.random()-.5)*r.width/sc,y:oy,vx:Math.cos(a)*v*1.6,vy:Math.sin(a)*v,w:6+Math.random()*7,h:4+Math.random()*5,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:cols[Math.random()*cols.length|0]}});
+ const t0=performance.now();(function f(t){const d=t-t0;g.clearRect(0,0,1600,900);
+  P.forEach(p=>{p.vy=Math.min(p.vy+.32,2.6+p.h*.3);p.vx*=.97;p.x+=Math.sin((d/300)+p.w)*.6;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;g.save();g.translate(p.x,p.y);g.rotate(p.r);g.globalAlpha=Math.max(0,1-(d-4400)/900);g.fillStyle=p.c;g.fillRect(-p.w/2,-p.h/2,p.w,p.h*Math.abs(Math.cos(p.r*2)));g.restore()});
+  if(d<5300)requestAnimationFrame(f);else cv.remove()})(t0)}
+$("#fiche").addEventListener("mouseover",ev=>{const c=ev.target.closest(".confetti");if(c&&!c.contains(ev.relatedTarget))confettis(c)});
+let audio=null;
+$("#fiche").addEventListener("click",ev=>{const b=ev.target.closest("[data-son]");if(!b)return;ev.stopPropagation();const c=b.parentElement;
+ if(audio&&!audio.paused){audio.pause();document.querySelectorAll(".pola.son").forEach(x=>x.classList.remove("joue"));return}
+ audio=new Audio(b.dataset.son);audio.onended=()=>c.classList.remove("joue");audio.play();c.classList.add("joue")});
+function majNav(){const p=E[cur-1],n=E[cur+1],bp=document.getElementById("anPrec"),bn=document.getElementById("anSuiv");
+ bp.hidden=!p;bn.hidden=false;if(p)bp.innerHTML=`← <b>${p.an}</b> ${p.ville}`;bn.innerHTML=n?`${n.ville} <b>${n.an}</b> →`:`<b>R comme Réseau</b> →`}
+document.getElementById("anPrec").addEventListener("click",()=>{if(cur>0){cur--;rendre()}});
+document.getElementById("anSuiv").addEventListener("click",()=>{if(cur<E.length-1){cur++;rendre()}
+ /* après 2026 : partie suivante de la présentation, « R comme Réseau » */
+ else if(window.parent!==window)window.parent.postMessage({rasf:"suivant"},"*");else location.href="03-membres.html"});
+/* Fenêtre des années : VISIBLES cases à la fois, chevrons pour faire défiler, l'année affichée reste toujours visible */
+const VISIBLES=3;let debut=0;
+function caler(force){const f=$("#fenetre"),w=f.clientWidth/VISIBLES;
+ if(!force){if(cur<debut)debut=cur;if(cur>=debut+VISIBLES)debut=cur-VISIBLES+1}
+ debut=Math.max(0,Math.min(E.length-VISIBLES,debut));
+ document.querySelectorAll("#annees .case").forEach(c=>c.style.width=w+"px");
+ $("#annees").style.transform=`translateX(${-debut*w}px)`;
+ $("#chevG").disabled=debut===0;$("#chevD").disabled=debut>=E.length-VISIBLES}
+$("#chevG").addEventListener("click",()=>{debut-=VISIBLES;caler(true)});
+$("#chevD").addEventListener("click",()=>{debut+=VISIBLES;caler(true)});
+addEventListener("resize",()=>caler(true));
+$("#annees").addEventListener("click",ev=>{const b=ev.target.closest(".an");if(b){cur=+b.dataset.i;rendre()}});
+addEventListener("keydown",ev=>{if(ev.key==="ArrowRight"&&cur<E.length-1){cur++;rendre()}if(ev.key==="ArrowLeft"&&cur>0){cur--;rendre()}});
+function ajuster(){const s=Math.min(innerWidth/1600,innerHeight/900);$("#stage").style.transform=`translate(-50%,-50%) scale(${s})`}
+addEventListener("resize",ajuster);ajuster();rendre();
+/* Avec le code : on déchiffre les dossiers de photos puis on réaffiche l'année en cours */
+if(window.Coffre&&Coffre.code()){const ds=[...new Set(E.flatMap(e=>[...(e.photos||[]),...(e.book||[])].map(p=>p.f.split("/")[0])))];
+ Promise.all(ds.map(d=>Coffre.dossier(d).then(m=>{for(const[k,v]of Object.entries(m))PH[d+"/"+k]=v}))).then(()=>{if(Object.keys(PH).length)rendre()})}
+</script>
+<script src="integration.js"></script>
+</body>
+</html>
